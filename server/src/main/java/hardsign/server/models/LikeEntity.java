@@ -1,20 +1,27 @@
 package hardsign.server.models;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
-import java.util.UUID;
 
 @Entity
 @Table(name = "likes")
 public class LikeEntity {
+    public LikeEntity() { }
+
+    public LikeEntity(UserEntity user, PostEntity post) {
+        User = user;
+        Post = post;
+    }
 
     @Id
-    public UUID Id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long Id;
 
-    @Column(name = "user_id", nullable = false)
-    public UUID UserId;
+    @ManyToOne(targetEntity = UserEntity.class)
+    @JoinColumn(name = "user_id", nullable = false)
+    public UserEntity User;
 
     @ManyToOne(targetEntity = PostEntity.class)
     @JoinColumn(name = "post_id", nullable = false)
-    public UUID PostId;
+    public PostEntity Post;
 }

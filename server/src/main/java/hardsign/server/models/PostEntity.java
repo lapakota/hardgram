@@ -1,24 +1,33 @@
 package hardsign.server.models;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
-import java.util.Collection;
 import java.util.Date;
-import java.util.UUID;
+import java.util.List;
 
 @Entity
 @Table(name = "posts")
 public class PostEntity {
+    public PostEntity() { }
+
+    public PostEntity(UserEntity user, List<String> photos, Date createTime, String description) {
+        User = user;
+        Photos = photos;
+        CreateTime = createTime;
+        Description = description;
+    }
 
     @Id
-    public UUID Id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long Id;
 
-    @ManyToOne(targetEntity = UserEntity.class)
-    @JoinColumn(name = "user_id", nullable = false)
-    public UUID UserId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    public UserEntity User;
 
     @Column(name = "photos", nullable = false)
-    public Collection<String> Photos;
+    @ElementCollection
+    public List<String> Photos;
 
     @Column(name = "create_time", nullable = false)
     public Date CreateTime;

@@ -1,26 +1,30 @@
 package hardsign.server.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-
-import java.util.UUID;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "hardgram_users")
 public class UserEntity {
+    public UserEntity() { }
+
+    public UserEntity(String nickname, String name, String surname, String avatar) {
+        this.Nickname = nickname;
+        this.Name = name;
+        this.Surname = surname;
+        this.Avatar = avatar;
+    }
 
     @Id
-    public UUID Id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
 
-    @Column(name = "username", length = 20)
+    @Column(name = "username")
     public String Name;
 
-    @Column(name = "surname", length = 30)
+    @Column(name = "surname")
     public String Surname;
 
-    @Column(name = "nickname", length = 24, nullable = false)
+    @Column(name = "nickname")
     public String Nickname;
 
     @Column(name = "avatar")
