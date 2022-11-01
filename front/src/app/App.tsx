@@ -1,22 +1,29 @@
 import React from 'react';
-import styles from './App.module.scss';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ProtectedRoute } from '../components/common/ProtectedRoute/ProtectedRoute';
+import { LoginForm } from '../components/pages/AuthPage/LoginForm/LoginForm';
+import { RegisterForm } from '../components/pages/AuthPage/RegisterForm/RegisterForm';
+import { MainPage } from '../components/pages/MainPage/MainPage';
+import styles from './App.scss';
 
 function App() {
   return (
-    <div className={styles.app}>
-      <header>
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className={styles.app}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <MainPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route path={'/auth/login'} element={<LoginForm />} />
+          <Route path={'/auth/register'} element={<RegisterForm />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 
