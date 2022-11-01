@@ -1,6 +1,6 @@
 package hardsign.server.controllers;
 
-import hardsign.server.models.UserEntity;
+import hardsign.server.entities.UserEntity;
 import hardsign.server.services.UserService;
 import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.stereotype.Controller;

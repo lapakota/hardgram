@@ -1,4 +1,4 @@
-package hardsign.server.models;
+package hardsign.server.entities;
 
 import javax.persistence.*;
 
@@ -7,11 +7,12 @@ import javax.persistence.*;
 public class UserEntity {
     public UserEntity() { }
 
-    public UserEntity(String nickname, String name, String surname, String avatar) {
-        this.Nickname = nickname;
+    public UserEntity(String nickname, String name, String surname, String avatar, String password) {
+        this.nickname = nickname;
         this.Name = name;
         this.Surname = surname;
         this.Avatar = avatar;
+        this.Password = password;
     }
 
     @Id
@@ -25,8 +26,11 @@ public class UserEntity {
     public String Surname;
 
     @Column(name = "nickname")
-    public String Nickname;
+    public String nickname;
 
     @Column(name = "avatar")
     public String Avatar;
+
+    @Column(name = "password", nullable = false)
+    public String Password;
 }
