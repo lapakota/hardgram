@@ -10,8 +10,8 @@ import java.util.List;
 public class PostEntity {
     public PostEntity() { }
 
-    public PostEntity(UserEntity user, List<String> photos, Date createTime, String description) {
-        User = user;
+    public PostEntity(Long userId, List<String> photos, Date createTime, String description) {
+        UserIdId = userId;
         Photos = photos;
         CreateTime = createTime;
         Description = description;
@@ -21,9 +21,9 @@ public class PostEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long Id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = UserEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    public UserEntity User;
+    public Long UserIdId;
 
     @Column(name = "photos", nullable = false)
     @ElementCollection
