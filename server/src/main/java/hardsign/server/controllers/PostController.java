@@ -1,34 +1,37 @@
 package hardsign.server.controllers;
 
-import hardsign.server.models.PostEntity;
+import hardsign.server.models.post.CreatePostModel;
+import hardsign.server.models.post.PostModel;
 import hardsign.server.services.PostService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.inject.Inject;
-import java.util.Optional;
 
 @Controller
 public class PostController {
     private final PostService postService;
+    private RuntimeException runtimeException;
 
     @Inject
-    public PostController(PostService postService) { this.postService = postService;}
+    public PostController(PostService postService) {
+        this.postService = postService;
+    }
 
     @GetMapping(value = "/posts/{id}")
     @ResponseBody
-    public Optional<PostEntity> get(Long postId) {
-            return postService.GetPost(postId);
+    public PostModel get(Long postId) {
+        return postService.GetPost(postId);
     }
 
     @PostMapping(path = "/posts/create")
     @ResponseBody
-    public Optional<PostEntity> create(PostEntity newPost){
+    public PostModel create(@RequestBody CreatePostModel createPostModel) {
         try {
-            postService.SavePost(newPost);
-            return postService.GetPost(newPost.Id);
+            return postService.CreatePost(createPostModel);
         } catch (Exception e) {
             throw new RuntimeException();
         }
@@ -36,9 +39,13 @@ public class PostController {
 
     @PostMapping(path = "/posts/update")
     @ResponseBody
-    public Optional<PostEntity> update (PostEntity postEntity){
-        postService.SavePost(postEntity);
-        return postService.GetPost(postEntity.Id);
+    public PostModel update(@RequestBody PostModel post) {
+        try {
+            postService.SavePost(post);
+        } catch (Exception e) {
+            throw runtimeException;
+        }
+        return postService.GetPost(post.getPostId());
     }
 
 }
