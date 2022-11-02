@@ -23,6 +23,8 @@ public class UserService implements UserDetailsService {
     public UserService(UserRepository userRepository, PasswordEncoderService encoder) {
         this.userRepository = userRepository;
         this.encoder = encoder;
+        var defaultUser = getDefaultUser();
+        userRepository.save(defaultUser);
     }
 
     @Override
@@ -37,6 +39,10 @@ public class UserService implements UserDetailsService {
 
     public UserEntity SaveUser(UserEntity userEntity) {
         return userRepository.save(userEntity);
+    }
+
+    private UserEntity getDefaultUser() {
+        return new UserEntity("lapakota", "Артём", "Самошкин", null, "I_hate_Java");
     }
 
     public UserEntity addUser(UserRegistrationModel userRegistrationModel) throws Exception {
