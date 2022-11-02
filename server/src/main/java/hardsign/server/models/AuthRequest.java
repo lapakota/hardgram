@@ -1,8 +1,12 @@
 package hardsign.server.models;
 
 public class AuthRequest {
-    private final String nickname;
-    private final String password;
+    private String nickname;
+    private String password;
+
+    private AuthRequest() {
+
+    }
 
     public AuthRequest(String nickname, String password) {
         this.nickname = nickname;

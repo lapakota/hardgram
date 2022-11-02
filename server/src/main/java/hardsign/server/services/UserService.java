@@ -25,6 +25,12 @@ public class UserService implements UserDetailsService {
         this.encoder = encoder;
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        var dbUser = userRepository.findByNickname(username);
+        return new User(dbUser.nickname, dbUser.Password, new ArrayList<>());
+    }
+
     public Optional<UserEntity> GetUser(Long userId) {
         return userRepository.findById(userId);
     }
@@ -49,11 +55,5 @@ public class UserService implements UserDetailsService {
         var password = encoder.getEncoder().encode(model.getPassword());
         return new UserEntity(model.getNickname(), model.getName(),
                 model.getSurname(), model.getAvatar(), password);
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var dbUser = userRepository.findByNickname(username);
-        return new User(dbUser.nickname, dbUser.Password, new ArrayList<>());
     }
 }
