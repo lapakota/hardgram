@@ -1,4 +1,4 @@
-package hardsign.server.models;
+package hardsign.server.entities;
 
 import javax.persistence.*;
 
