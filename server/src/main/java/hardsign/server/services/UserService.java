@@ -54,8 +54,7 @@ public class UserService implements UserDetailsService {
 
     private UserEntity map(UserRegistrationModel model) {
         var password = encoder.getEncoder().encode(model.getPassword());
-        return new UserEntity(model.getNickname(), model.getName(),
-                model.getSurname(), model.getAvatar(), password);
+        return new UserEntity(model.getNickname(), model.getFullName(), model.getAvatar(), password);
     }
 
     private void AddDefaultUser() {
@@ -67,6 +66,7 @@ public class UserService implements UserDetailsService {
     }
 
     private UserEntity getDefaultUser() {
-        return new UserEntity("lapakota", "Артём", "Самошкин", null, "I_hate_Java");
+        var password = encoder.getEncoder().encode("I_hate_Java");
+        return new UserEntity("lapakota", "Артём Самошкин", null, password);
     }
 }
