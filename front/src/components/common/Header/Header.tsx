@@ -1,5 +1,15 @@
 import React from 'react';
+import styles from './Header.module.scss';
 
 export const Header = () => {
-  return <div>header</div>;
+  //TODO проверять из userStore
+  const isAuth = false;
+
+  if (!isAuth) return null;
+
+  return (
+    <header className={styles.header}>
+      <span className={styles.logo}>hardgram</span>
+    </header>
+  );
 };
