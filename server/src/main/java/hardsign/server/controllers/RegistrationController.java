@@ -3,14 +3,12 @@ package hardsign.server.controllers;
 import hardsign.server.models.UserModel;
 import hardsign.server.models.UserRegistrationModel;
 import hardsign.server.services.UserService;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 
-@Controller
+@RestController
 public class RegistrationController {
     private final UserService userService;
 
@@ -20,14 +18,14 @@ public class RegistrationController {
     }
 
     @PostMapping("registration")
-    @ResponseBody
-    public UserModel addUser(@RequestBody UserRegistrationModel userRegistrationModel) {
+    public ResponseEntity<UserModel> registration(@RequestBody UserRegistrationModel userRegistrationModel) {
         try {
             var registeredUser = userService.addUser(userRegistrationModel);
-            return new UserModel(registeredUser.nickname);
-
-        } catch (Exception ex) {
-            return null;
+            return ResponseEntity.ok(new UserModel(registeredUser.nickname));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(400)
+                    .build();
         }
     }
 }

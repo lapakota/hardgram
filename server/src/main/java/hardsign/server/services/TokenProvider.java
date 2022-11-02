@@ -33,7 +33,7 @@ public class TokenProvider {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setIssuedAt(new Date())
                 .setExpiration(Date.from(tokenExpiration.atZone(ZoneId.systemDefault()).toInstant()))
                 .signWith(Key)
                 .compact();

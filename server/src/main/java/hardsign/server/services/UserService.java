@@ -23,14 +23,21 @@ public class UserService implements UserDetailsService {
     public UserService(UserRepository userRepository, PasswordEncoderService encoder) {
         this.userRepository = userRepository;
         this.encoder = encoder;
+        AddDefaultUser();
     }
 
-    public Optional<UserEntity> GetUser(Long userId) {
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        var dbUser = userRepository.findByNickname(username);
+        return new User(dbUser.nickname, dbUser.Password, new ArrayList<>());
+    }
+
+    public Optional<UserEntity> getUser(Long userId) {
         return userRepository.findById(userId);
     }
 
-    public UserEntity SaveUser(UserEntity userEntity) {
-        return userRepository.save(userEntity);
+    public UserEntity getUser(String nickname) {
+        return userRepository.findByNickname(nickname);
     }
 
     public UserEntity addUser(UserRegistrationModel userRegistrationModel) throws Exception {
@@ -51,9 +58,15 @@ public class UserService implements UserDetailsService {
                 model.getSurname(), model.getAvatar(), password);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var dbUser = userRepository.findByNickname(username);
-        return new User(dbUser.nickname, dbUser.Password, new ArrayList<>());
+    private void AddDefaultUser() {
+        var defaultUser = getDefaultUser();
+        var dbUser = getUser(defaultUser.nickname);
+
+        if (dbUser == null)
+            userRepository.save(defaultUser);
+    }
+
+    private UserEntity getDefaultUser() {
+        return new UserEntity("lapakota", "Артём", "Самошкин", null, "I_hate_Java");
     }
 }
