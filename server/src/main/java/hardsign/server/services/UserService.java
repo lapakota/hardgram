@@ -66,6 +66,7 @@ public class UserService implements UserDetailsService {
     }
 
     private UserEntity getDefaultUser() {
-        return new UserEntity("lapakota", "Артём Самошкин", null, "I_hate_Java");
+        var password = encoder.getEncoder().encode("I_hate_Java");
+        return new UserEntity("lapakota", "Артём Самошкин", null, password);
     }
 }
