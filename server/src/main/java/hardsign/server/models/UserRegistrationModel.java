@@ -2,8 +2,7 @@ package hardsign.server.models;
 
 public class UserRegistrationModel {
     private String nickname;
-    private String name;
-    private String surname;
+    private String fullName;
     private String avatar;
     private String password;
 
@@ -13,22 +12,6 @@ public class UserRegistrationModel {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
     }
 
     public String getAvatar() {
@@ -45,5 +28,13 @@ public class UserRegistrationModel {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }

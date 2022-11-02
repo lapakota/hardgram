@@ -7,10 +7,9 @@ import javax.persistence.*;
 public class UserEntity {
     public UserEntity() { }
 
-    public UserEntity(String nickname, String name, String surname, String avatar, String password) {
+    public UserEntity(String nickname, String fullName, String avatar, String password) {
         this.nickname = nickname;
-        this.Name = name;
-        this.Surname = surname;
+        this.fullName = fullName;
         this.Avatar = avatar;
         this.Password = password;
     }
@@ -19,11 +18,8 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
-    @Column(name = "username")
-    public String Name;
-
-    @Column(name = "surname")
-    public String Surname;
+    @Column(name = "fullName")
+    public String fullName;
 
     @Column(name = "nickname")
     public String nickname;
