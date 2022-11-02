@@ -18,7 +18,7 @@ public class RegistrationController {
     }
 
     @PostMapping("registration")
-    public ResponseEntity<UserModel> addUser(@RequestBody UserRegistrationModel userRegistrationModel) {
+    public ResponseEntity<UserModel> registration(@RequestBody UserRegistrationModel userRegistrationModel) {
         try {
             var registeredUser = userService.addUser(userRegistrationModel);
             return ResponseEntity.ok(new UserModel(registeredUser.nickname));

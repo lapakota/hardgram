@@ -5,7 +5,6 @@ public class UserRegistrationModel {
     private String name;
     private String surname;
     private String avatar;
-
     private String password;
 
     public String getNickname() {

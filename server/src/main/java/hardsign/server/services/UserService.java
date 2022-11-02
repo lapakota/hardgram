@@ -23,8 +23,7 @@ public class UserService implements UserDetailsService {
     public UserService(UserRepository userRepository, PasswordEncoderService encoder) {
         this.userRepository = userRepository;
         this.encoder = encoder;
-        var defaultUser = getDefaultUser();
-        userRepository.save(defaultUser);
+        AddDefaultUser();
     }
 
     @Override
@@ -33,16 +32,12 @@ public class UserService implements UserDetailsService {
         return new User(dbUser.nickname, dbUser.Password, new ArrayList<>());
     }
 
-    public Optional<UserEntity> GetUser(Long userId) {
+    public Optional<UserEntity> getUser(Long userId) {
         return userRepository.findById(userId);
     }
 
-    public UserEntity SaveUser(UserEntity userEntity) {
-        return userRepository.save(userEntity);
-    }
-
-    private UserEntity getDefaultUser() {
-        return new UserEntity("lapakota", "Артём", "Самошкин", null, "I_hate_Java");
+    public UserEntity getUser(String nickname) {
+        return userRepository.findByNickname(nickname);
     }
 
     public UserEntity addUser(UserRegistrationModel userRegistrationModel) throws Exception {
@@ -61,5 +56,17 @@ public class UserService implements UserDetailsService {
         var password = encoder.getEncoder().encode(model.getPassword());
         return new UserEntity(model.getNickname(), model.getName(),
                 model.getSurname(), model.getAvatar(), password);
+    }
+
+    private void AddDefaultUser() {
+        var defaultUser = getDefaultUser();
+        var dbUser = getUser(defaultUser.nickname);
+
+        if (dbUser == null)
+            userRepository.save(defaultUser);
+    }
+
+    private UserEntity getDefaultUser() {
+        return new UserEntity("lapakota", "Артём", "Самошкин", null, "I_hate_Java");
     }
 }
