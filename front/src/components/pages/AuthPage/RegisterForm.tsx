@@ -2,6 +2,8 @@ import React from 'react';
 import { Button } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';
+import { registerAccount } from '../../../api/auth/authApi';
+import { UserRegistrationModel } from '../../../api/models/UserRegistrationModel';
 import { FormInputText } from '../../common/FormInputText/FormInputText';
 import {
   REQUIRED_FIELD_ERROR_MESSAGE,
@@ -18,7 +20,17 @@ export const RegisterForm = () => {
     control,
     formState: { errors }
   } = useForm();
-  const onSubmit = (data: any) => console.log(data);
+
+  const onRegister = async (formData: UserRegistrationModel) => {
+    try {
+      await registerAccount(formData);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const onSubmit = (data: any) => {
+    onRegister(data).then((x) => console.log(x));
+  };
 
   return (
     <form className={styles.form}>
@@ -26,7 +38,7 @@ export const RegisterForm = () => {
         <HardgramLogo />
         <div className={styles.fields}>
           <FormInputText
-            name={'login'}
+            name={'nickname'}
             control={control}
             label={'Login'}
             rules={{

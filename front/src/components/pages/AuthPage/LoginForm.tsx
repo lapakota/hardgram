@@ -2,6 +2,8 @@ import React from 'react';
 import { Button } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';
+import { signIn } from '../../../api/auth/authApi';
+import { AuthRequest } from '../../../api/models/AuthRequest';
 import { FormInputText } from '../../common/FormInputText/FormInputText';
 import {
   REQUIRED_FIELD_ERROR_MESSAGE,
@@ -17,7 +19,16 @@ export const LoginForm = () => {
     control,
     formState: { errors }
   } = useForm();
-  const onSubmit = (data: any) => console.log(data);
+  const onLogin = async (formData: AuthRequest) => {
+    try {
+      await signIn(formData);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const onSubmit = (data: any) => {
+    onLogin(data).then((x) => console.log(x));
+  };
 
   return (
     <form className={styles.form}>
@@ -25,7 +36,7 @@ export const LoginForm = () => {
         <HardgramLogo />
         <div className={styles.fields}>
           <FormInputText
-            name={'login'}
+            name={'nickName'}
             control={control}
             label={'Login'}
             rules={{
