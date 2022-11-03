@@ -36,7 +36,7 @@ export const LoginForm = () => {
         <HardgramLogo />
         <div className={styles.fields}>
           <FormInputText
-            name={'nickName'}
+            name={'nickname'}
             control={control}
             label={'Login'}
             rules={{
