@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 
 @RestController
+@CrossOrigin
 public class RegistrationController {
     private final UserService userService;
 
