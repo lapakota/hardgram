@@ -29,7 +29,7 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         var dbUser = userRepository.findByNickname(username);
-        return new User(dbUser.nickname, dbUser.Password, new ArrayList<>());
+        return new User(dbUser.getNickname(), dbUser.getPassword(), new ArrayList<>());
     }
 
     public Optional<UserEntity> getUser(Long userId) {
@@ -59,7 +59,7 @@ public class UserService implements UserDetailsService {
 
     private void AddDefaultUser() {
         var defaultUser = getDefaultUser();
-        var dbUser = getUser(defaultUser.nickname);
+        var dbUser = getUser(defaultUser.getNickname());
 
         if (dbUser == null)
             userRepository.save(defaultUser);

@@ -21,7 +21,7 @@ public class RegistrationController {
     public ResponseEntity<UserModel> registration(@RequestBody UserRegistrationModel userRegistrationModel) {
         try {
             var registeredUser = userService.addUser(userRegistrationModel);
-            return ResponseEntity.ok(new UserModel(registeredUser.nickname));
+            return ResponseEntity.ok(new UserModel(registeredUser.getNickname()));
         } catch (Exception e) {
             return ResponseEntity
                     .status(400)

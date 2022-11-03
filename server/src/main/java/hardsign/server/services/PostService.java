@@ -4,6 +4,8 @@ import hardsign.server.entities.PostEntity;
 import hardsign.server.models.post.CreatePostModel;
 import hardsign.server.models.post.PostModel;
 import hardsign.server.repositories.PostRepository;
+import hardsign.server.repositories.UserRepository;
+import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -12,10 +14,12 @@ import java.util.Date;
 @Component
 public class PostService {
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
     @Inject
-    public PostService(PostRepository postRepository) {
+    public PostService(PostRepository postRepository, UserRepository userRepository) {
         this.postRepository = postRepository;
+        this.userRepository = userRepository;
     }
 
     public PostModel GetPost(Long postId) {
@@ -24,25 +28,25 @@ public class PostService {
             assert post != null;
             return mapToModel(post);
         } catch (Exception e) {
-            throw new RuntimeException("Пошел нахуй");
+            throw new RuntimeException();
         }
     }
 
-    public PostModel SavePost(PostModel postModel) {
+    public PostModel UpdatePost(PostModel postModel) {
         return mapToModel(postRepository.save(mapToEntity(postModel)));
     }
 
-    public PostModel CreatePost(CreatePostModel createPostModel) {
-        var post = new PostEntity(createPostModel.getUserId(), createPostModel.getPhotos(), new Date(), createPostModel.getDescription());
-        var newPost = postRepository.save(post);
-        return mapToModel(newPost);
+    public PostEntity CreatePost(CreatePostModel createPostModel) {
+        var user = userRepository.findById(createPostModel.getUserId()).get();
+        var post = new PostEntity(user, createPostModel.getPhotos(), new Date(), createPostModel.getDescription());
+        return postRepository.save(post);
     }
 
     private PostEntity mapToEntity(PostModel model) {
-        return new PostEntity(model.getUserId(), model.getPhotos(), model.getCreateTime(), model.getDescription());
+        throw new NotYetImplementedException();
     }
 
     private PostModel mapToModel(PostEntity postEntity) {
-        return new PostModel(postEntity.Id, postEntity.UserIdId, postEntity.Photos, postEntity.CreateTime, postEntity.Description);
+        return new PostModel(postEntity.getId(), postEntity.getUser().getId(), postEntity.getPhotos(), postEntity.getCreateTime(), postEntity.getDescription());
     }
 }

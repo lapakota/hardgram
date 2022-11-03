@@ -76,6 +76,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         var permitAllUrls = new String[] {
                 "/registration",
                 "/auth/*",
+                "/auth/login",
                 "/swagger-ui/**",
                 "/swagger-resources/**",
                 "/v2/api-docs",

@@ -7,11 +7,15 @@ import java.util.Date;
 @Entity
 @Table(name = "comments")
 public class CommentEntity {
+     public CommentEntity() {
+
+     }
+
     public CommentEntity(UserEntity user, PostEntity post, String text, Date createTime) {
-        User = user;
-        Post = post;
-        Text = text;
-        CreateTime = createTime;
+        this.user = user;
+        this.post = post;
+        this.text = text;
+        this.createTime = createTime;
     }
 
     @Id
@@ -20,15 +24,51 @@ public class CommentEntity {
 
     @ManyToOne(targetEntity = UserEntity.class)
     @JoinColumn(name = "user_id", nullable = false)
-    public UserEntity User;
+    private UserEntity user;
 
     @ManyToOne(targetEntity = PostEntity.class)
     @JoinColumn(name = "post_id", nullable = false)
-    public PostEntity Post;
+    private PostEntity post;
 
     @Column(name = "create_at", nullable = false)
-    public Date CreateTime;
+    private Date createTime;
 
     @Column(name = "text", nullable = false)
-    public String Text;
+    private String text;
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
+    public PostEntity getPost() {
+        return post;
+    }
+
+    public void setPost(PostEntity post) {
+        this.post = post;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public Long getId() {
+        return Id;
+    }
 }

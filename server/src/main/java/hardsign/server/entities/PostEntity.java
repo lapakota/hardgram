@@ -10,28 +10,61 @@ import java.util.List;
 public class PostEntity {
     public PostEntity() { }
 
-    public PostEntity(Long userId, List<String> photos, Date createTime, String description) {
-        UserIdId = userId;
-        Photos = photos;
-        CreateTime = createTime;
-        Description = description;
+    public PostEntity(UserEntity user, List<String> photos, Date createTime, String description) {
+        this.id = 0L;
+        this.user = user;
+        this.photos = photos;
+        this.createTime = createTime;
+        this.description = description;
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long Id;
+    private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = UserEntity.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    public Long UserIdId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
 
     @Column(name = "photos", nullable = false)
     @ElementCollection
-    public List<String> Photos;
+    private List<String> photos;
 
     @Column(name = "create_time", nullable = false)
-    public Date CreateTime;
+    private Date createTime;
 
     @Column(name = "description")
-    public String Description;
+    private String description;
+
+    public Long getId() {
+        return id;
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public List<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<String> photos) {
+        this.photos = photos;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

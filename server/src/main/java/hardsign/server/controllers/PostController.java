@@ -31,8 +31,10 @@ public class PostController {
     @ResponseBody
     public PostModel create(@RequestBody CreatePostModel createPostModel) {
         try {
-            return postService.CreatePost(createPostModel);
+            var post=  postService.CreatePost(createPostModel);
+            return new PostModel(post.getId(), post.getUser().getId(), post.getPhotos(), post.getCreateTime(), post.getDescription());
         } catch (Exception e) {
+            System.out.println(e);
             throw new RuntimeException();
         }
     }
@@ -41,11 +43,10 @@ public class PostController {
     @ResponseBody
     public PostModel update(@RequestBody PostModel post) {
         try {
-            postService.SavePost(post);
+            postService.UpdatePost(post);
         } catch (Exception e) {
             throw runtimeException;
         }
         return postService.GetPost(post.getPostId());
     }
-
 }

@@ -10,7 +10,6 @@ public class PostModel {
     private final Date createTime;
     private final String description;
 
-
     public PostModel(Long postId, Long userId, List<String> photos, Date createTime, String description) {
         this.PostId = postId;
         this.userId = userId;
@@ -21,10 +20,6 @@ public class PostModel {
 
     public Long getPostId() {
         return PostId;
-    }
-
-    public PostModel getPost() {
-        return this;
     }
 
     public Long getUserId() {
