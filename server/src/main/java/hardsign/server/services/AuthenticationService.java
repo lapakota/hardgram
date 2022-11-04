@@ -1,8 +1,9 @@
 package hardsign.server.services;
 
+import hardsign.server.common.Result;
+import hardsign.server.common.Status;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,11 +21,15 @@ public class AuthenticationService {
         this.tokenProvider = tokenProvider;
     }
 
-    public String Auth(String nickname, String password) throws AuthenticationException {
-        var authToken = new UsernamePasswordAuthenticationToken(nickname, password);
-        authenticationManager.authenticate(authToken);
+    public Result<String> Auth(String nickname, String password) {
+        if (nickname == null || password == null)
+            return Result.fault(Status.IncorrectArguments);
 
-        var userDetails = userService.loadUserByUsername(nickname);
-        return tokenProvider.generate(userDetails);
+        var authToken = new UsernamePasswordAuthenticationToken(nickname, password);
+
+        return Result
+                .of(() -> authenticationManager.authenticate(authToken), Status.AuthError)
+                .then(() -> userService.loadUserByUsername(nickname), Status.ServerError)
+                .then(tokenProvider::generate);
     }
 }

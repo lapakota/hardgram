@@ -1,5 +1,6 @@
 package hardsign.server.controllers;
 
+import hardsign.server.common.Mapper;
 import hardsign.server.models.UserModel;
 import hardsign.server.models.UserRegistrationModel;
 import hardsign.server.services.UserService;
@@ -12,21 +13,19 @@ import javax.inject.Inject;
 @CrossOrigin
 public class RegistrationController {
     private final UserService userService;
+    private final Mapper mapper;
 
     @Inject
-    public RegistrationController(UserService userService) {
+    public RegistrationController(UserService userService, Mapper mapper) {
         this.userService = userService;
+        this.mapper = mapper;
     }
 
     @PostMapping("registration")
     public ResponseEntity<UserModel> registration(@RequestBody UserRegistrationModel userRegistrationModel) {
-        try {
-            var registeredUser = userService.addUser(userRegistrationModel);
-            return ResponseEntity.ok(new UserModel(registeredUser.nickname));
-        } catch (Exception e) {
-            return ResponseEntity
-                    .status(400)
-                    .build();
-        }
+        var result = userService.addUser(userRegistrationModel);
+        return result
+                .then(user -> new UserModel(user.nickname))
+                .mapStatus(mapper::map);
     }
 }

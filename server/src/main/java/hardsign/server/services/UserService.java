@@ -1,5 +1,7 @@
 package hardsign.server.services;
 
+import hardsign.server.common.Result;
+import hardsign.server.common.Status;
 import hardsign.server.entities.UserEntity;
 import hardsign.server.models.UserRegistrationModel;
 import hardsign.server.repositories.UserRepository;
@@ -40,16 +42,17 @@ public class UserService implements UserDetailsService {
         return userRepository.findByNickname(nickname);
     }
 
-    public UserEntity addUser(UserRegistrationModel userRegistrationModel) throws Exception {
-        var dbUser = userRepository.findByNickname(userRegistrationModel.getNickname());
+    public Result<UserEntity> addUser(UserRegistrationModel userRegistrationModel){
+        var nickname = userRegistrationModel.getNickname();
+        var findByNickname = userRepository.findByNickname(nickname);
 
-        if (dbUser != null) {
-            throw new Exception("already exist");
+        if (findByNickname != null) {
+            return Result.fault(Status.IncorrectArguments);
         }
 
-        var user = map(userRegistrationModel);
-
-        return userRepository.save(user);
+        return Result
+                .of(() -> map(userRegistrationModel), Status.ServerError)
+                .then(userRepository::save);
     }
 
     private UserEntity map(UserRegistrationModel model) {
