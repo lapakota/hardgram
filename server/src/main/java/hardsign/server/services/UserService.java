@@ -2,6 +2,7 @@ package hardsign.server.services;
 
 import hardsign.server.entities.UserEntity;
 import hardsign.server.models.user.UserRegistrationModel;
+import hardsign.server.models.user.UserUpdateModel;
 import hardsign.server.repositories.UserRepository;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,11 +18,13 @@ import java.util.Optional;
 @Component
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+    private final CurrentUserService currentUserService;
     private final PasswordEncoderService encoder;
 
     @Inject
-    public UserService(UserRepository userRepository, PasswordEncoderService encoder) {
+    public UserService(UserRepository userRepository, CurrentUserService currentUserService, PasswordEncoderService encoder) {
         this.userRepository = userRepository;
+        this.currentUserService = currentUserService;
         this.encoder = encoder;
         AddDefaultUser();
     }
@@ -36,8 +39,20 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(userId);
     }
 
-    public UserEntity getUser(String nickname) {
-        return userRepository.findByNickname(nickname);
+    public Optional<UserEntity> getUser(String nickname) {
+        return Optional.ofNullable(userRepository.findByNickname(nickname));
+    }
+
+    public Optional<UserEntity> updateUser(UserUpdateModel updateUserModel) {
+        return currentUserService.getCurrentUser()
+                .map(user -> update(user, updateUserModel))
+                .map(userRepository::save);
+    }
+
+    private UserEntity update(UserEntity user, UserUpdateModel updateUserModel) {
+        user.setAvatar(updateUserModel.getAvatar());
+        user.setFullName(updateUserModel.getFullName());
+        return user;
     }
 
     public UserEntity addUser(UserRegistrationModel userRegistrationModel) throws Exception {
@@ -61,7 +76,7 @@ public class UserService implements UserDetailsService {
         var defaultUser = getDefaultUser();
         var dbUser = getUser(defaultUser.getNickname());
 
-        if (dbUser == null)
+        if (dbUser.isEmpty())
             userRepository.save(defaultUser);
     }
 

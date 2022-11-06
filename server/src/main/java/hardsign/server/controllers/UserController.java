@@ -1,14 +1,12 @@
 package hardsign.server.controllers;
 
 import hardsign.server.common.mapper.Mapper;
-import hardsign.server.models.post.PostModel;
 import hardsign.server.models.user.UserModel;
+import hardsign.server.models.user.UserUpdateModel;
 import hardsign.server.services.CurrentUserService;
 import hardsign.server.services.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 
@@ -33,11 +31,27 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping(value = "/user/{postId}")
-    public ResponseEntity<UserModel> getUser(Long userId) {
+    @GetMapping(value = "/user/{userId}")
+    public ResponseEntity<UserModel> getById(Long userId) {
         return userService.getUser(userId)
                 .map(mapper::mapToModel)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping(value = "/user/{nickname}")
+    public ResponseEntity<UserModel> getByNickname(String nickname) {
+        return userService.getUser(nickname)
+                .map(mapper::mapToModel)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping(value = "/update")
+    public ResponseEntity<UserModel> update(@RequestBody UserUpdateModel userUpdateModel) {
+        return userService.updateUser(userUpdateModel)
+                .map(mapper::mapToModel)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.badRequest().build());
     }
 }
