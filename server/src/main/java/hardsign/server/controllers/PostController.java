@@ -5,16 +5,15 @@ import hardsign.server.models.post.PostModel;
 import hardsign.server.models.post.UpdatePostModel;
 import hardsign.server.services.PostService;
 import hardsign.server.services.UserService;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.util.List;
 
-@Controller
+@RestController
+@CrossOrigin
 public class PostController {
     private final PostService postService;
     private final UserService userService;

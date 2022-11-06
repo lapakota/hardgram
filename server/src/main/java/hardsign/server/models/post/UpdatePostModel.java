@@ -1,6 +1,4 @@
 package hardsign.server.models.post;
-
-import java.util.Date;
 import java.util.List;
 
 public class UpdatePostModel {
