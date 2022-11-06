@@ -7,4 +7,6 @@ class UserStore {
   }
 }
 
-export const userStore = new UserStore();
+export function useUserStore(): UserStore {
+  return new UserStore();
+}
