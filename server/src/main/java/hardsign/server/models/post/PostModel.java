@@ -4,14 +4,14 @@ import java.util.List;
 import java.util.Date;
 
 public class PostModel {
-    private final Long PostId;
+    private final Long postId;
     private final Long userId;
     private final List<String> photos;
     private final Date createTime;
     private final String description;
 
     public PostModel(Long postId, Long userId, List<String> photos, Date createTime, String description) {
-        this.PostId = postId;
+        this.postId = postId;
         this.userId = userId;
         this.photos = photos;
         this.createTime = createTime;
@@ -19,7 +19,7 @@ public class PostModel {
     }
 
     public Long getPostId() {
-        return PostId;
+        return postId;
     }
 
     public Long getUserId() {
