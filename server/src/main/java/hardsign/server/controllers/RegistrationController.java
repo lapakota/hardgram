@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 
 @RestController
+@CrossOrigin
 public class RegistrationController {
     private final UserService userService;
     private final Mapper mapper;
@@ -22,13 +23,9 @@ public class RegistrationController {
 
     @PostMapping("registration")
     public ResponseEntity<UserModel> registration(@RequestBody UserRegistrationModel userRegistrationModel) {
-        try {
-            var registeredUser = userService.addUser(userRegistrationModel);
-            return ResponseEntity.ok(mapper.mapToModel(registeredUser));
-        } catch (Exception e) {
-            return ResponseEntity
-                    .status(400)
-                    .build();
-        }
+        var result = userService.addUser(userRegistrationModel);
+        return result
+                .then(user -> new UserModel(user.nickname))
+                .mapStatus(mapper::map);
     }
 }
