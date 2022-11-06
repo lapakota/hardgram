@@ -1,4 +1,4 @@
-package hardsign.server.models;
+package hardsign.server.models.user;
 
 public class UserRegistrationModel {
     private String nickname;

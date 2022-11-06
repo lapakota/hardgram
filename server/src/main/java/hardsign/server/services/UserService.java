@@ -1,7 +1,7 @@
 package hardsign.server.services;
 
 import hardsign.server.entities.UserEntity;
-import hardsign.server.models.UserRegistrationModel;
+import hardsign.server.models.user.UserRegistrationModel;
 import hardsign.server.repositories.UserRepository;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

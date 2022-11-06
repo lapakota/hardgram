@@ -3,18 +3,12 @@ package hardsign.server.models.post;
 import java.util.List;
 
 public class CreatePostModel {
-    private final Long userId;
     private final List<String> photos;
     private final String description;
 
-    public CreatePostModel(Long userId, List<String> photos, String description) {
-        this.userId = userId;
+    public CreatePostModel(List<String> photos, String description) {
         this.photos = photos;
         this.description = description;
-    }
-
-    public Long getUserId() {
-        return userId;
     }
 
     public List<String> getPhotos() {
