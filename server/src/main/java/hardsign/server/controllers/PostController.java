@@ -5,8 +5,8 @@ import hardsign.server.models.post.PostModel;
 import hardsign.server.models.post.UpdatePostModel;
 import hardsign.server.services.PostService;
 import hardsign.server.services.UserService;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -25,13 +25,11 @@ public class PostController {
     }
 
     @GetMapping(value = "/post/{postId}")
-    @ResponseBody
     public PostModel get(Long postId) {
         return postService.getPost(postId);
     }
 
     @GetMapping(value = "/posts/{userId}")
-    @ResponseBody
     public List<PostModel> getPostsByUserId(Long userId) {
         var postEntityList = userService.getUser(userId).get().getPosts();
         return postEntityList.stream().map(postEntity -> postService.getPost(postEntity.getId())).toList();
@@ -39,7 +37,6 @@ public class PostController {
 
 
     @PostMapping(path = "/post/create")
-    @ResponseBody
     public PostModel create(@RequestBody CreatePostModel createPostModel) {
         try {
             return postService.createPost(createPostModel);
@@ -49,18 +46,28 @@ public class PostController {
     }
 
     @PostMapping(path = "/post/update")
-    @ResponseBody
     public PostModel update(@RequestBody UpdatePostModel post) {
         try {
-           return postService.updatePost(post);
+            return postService.updatePost(post);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
     }
 
     @PostMapping(path = "/post/delete/{id}")
-    @ResponseBody
-    public boolean delete(Long id) {
-           return postService.deletePost(id);
+    public ResponseEntity<Boolean> delete(Long id) {
+        try {
+            postService.deletePost(id);
+            return ResponseEntity.ok(true);
+        } catch (AuthenticationException e) {
+            return ResponseEntity
+                    .status(401)
+                    .build();
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(500)
+                    .build();
+        }
+
     }
 }

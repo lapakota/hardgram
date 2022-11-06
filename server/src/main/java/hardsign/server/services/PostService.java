@@ -28,13 +28,8 @@ public class PostService {
     }
 
     public PostModel getPost(Long postId) {
-        var post = postRepository.findById(postId).orElse(null);
-        try {
-            assert post != null;
-            return mapToModel(post);
-        } catch (Exception e) {
-            throw new RuntimeException();
-        }
+        var post = postRepository.findById(postId).orElseThrow(RuntimeException::new);
+        return mapToModel(post);
     }
 
     public PostModel updatePost(UpdatePostModel updatePostModel) {
@@ -42,41 +37,18 @@ public class PostService {
         var post = postRepository.findById(updatePostModel.getPostId()).get();
         post.setDescription(updatePostModel.getDescription());
         post.setPhotos(updatePostModel.getPhotos());
-        postRepository.save(post);
-        return mapToModel(postRepository.findById(updatePostModel.getPostId()).get());
+        var newPost = postRepository.save(post);
+        return mapToModel(newPost);
     }
 
-    @Modifying
-    @Query("update posts p set p.photos = ?2, p.description = ?3 where p.id = ?1")
-    private void updatePostEntityById(@Param(value = "postId") long id, @Param(value = "photos") List<String> photos, @Param(value = "description") String description) {
-
-    }
-
-    public boolean deletePost(Long postId){
-        try {
-            postRepository.deleteById(postId);
-            return true;
-        } catch (Exception e){
-            return false;
-        }
+    public void deletePost(Long postId) {
+        postRepository.deleteById(postId);
     }
 
     public PostModel createPost(CreatePostModel createPostModel) {
         var user = userRepository.findById(createPostModel.getUserId()).get();
         var post = new PostEntity(user, createPostModel.getPhotos(), new Date(), createPostModel.getDescription());
         return mapToModel(postRepository.save(post));
-    }
-
-    private PostEntity mapToEntity(PostModel model) {
-        var user = userRepository.findById(model.getUserId()).get();
-        return new PostEntity(user, model.getPhotos(), model.getCreateTime(), model.getDescription());
-    }
-
-    private PostEntity mapToEntity(UpdatePostModel updatePostModel) {
-        var postModel =  postRepository.findById(updatePostModel.getPostId()).get();
-        var user = postModel.getUser();
-        var createTime = postModel.getCreateTime();
-        return new PostEntity(user, updatePostModel.getPhotos(), createTime, updatePostModel.getDescription());
     }
 
     private PostModel mapToModel(PostEntity postEntity) {
