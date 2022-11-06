@@ -22,7 +22,9 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoderService encoder;
 
     @Inject
-    public UserService(UserRepository userRepository, CurrentUserService currentUserService, PasswordEncoderService encoder) {
+    public UserService(
+            UserRepository userRepository,
+            CurrentUserService currentUserService, PasswordEncoderService encoder) {
         this.userRepository = userRepository;
         this.currentUserService = currentUserService;
         this.encoder = encoder;
