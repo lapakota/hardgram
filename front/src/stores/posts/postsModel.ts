@@ -8,5 +8,6 @@ class PostsModel {
   }
 }
 
-const postsStore = new PostsModel();
-export default postsStore;
+export function usePostsStore(): PostsModel {
+  return new PostsModel();
+}

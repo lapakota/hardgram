@@ -2,7 +2,7 @@ import { BASE_ROUTE, HTTP_METHODS } from '../utils';
 import { PostModelCreate } from '../models/Post/PostModelCreate';
 
 export const create = async (post: PostModelCreate): Promise<Response> =>
-  await fetch(BASE_ROUTE + '/post/create', {
+  await fetch(`${BASE_ROUTE}/post/create`, {
     method: HTTP_METHODS.POST,
     headers: {
       'Content-Type': 'application/json',
@@ -12,7 +12,7 @@ export const create = async (post: PostModelCreate): Promise<Response> =>
   });
 
 export const getPost = async (postId: string): Promise<Response> =>
-  await fetch(BASE_ROUTE + `/post/${postId}`, {
+  await fetch(`${BASE_ROUTE}/post/${postId}`, {
     method: HTTP_METHODS.GET,
     headers: {
       'Content-Type': 'application/json',
@@ -21,7 +21,7 @@ export const getPost = async (postId: string): Promise<Response> =>
   });
 
 export const getPosts = async (userId: string): Promise<Response> =>
-  await fetch(BASE_ROUTE + `/posts/${userId}`, {
+  await fetch(`${BASE_ROUTE}/posts/${userId}`, {
     method: HTTP_METHODS.GET,
     headers: {
       'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ export const getPosts = async (userId: string): Promise<Response> =>
   });
 
 export const deletePost = async (postId: string): Promise<Response> =>
-  await fetch(BASE_ROUTE + `/post/delete/${postId}`, {
+  await fetch(`${BASE_ROUTE}/post/delete/${postId}`, {
     method: HTTP_METHODS.GET,
     headers: {
       'Content-Type': 'application/json',
