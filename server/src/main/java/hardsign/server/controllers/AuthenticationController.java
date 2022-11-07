@@ -1,6 +1,5 @@
 package hardsign.server.controllers;
 
-import hardsign.server.common.Mapper;
 import hardsign.server.models.AuthRequest;
 import hardsign.server.models.AuthResponse;
 import hardsign.server.services.AuthenticationService;
@@ -12,11 +11,9 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
-    private final Mapper mapper;
 
-    public AuthenticationController(AuthenticationService authenticationService, Mapper mapper) {
+    public AuthenticationController(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
-        this.mapper = mapper;
     }
 
     @PostMapping("auth/login")
@@ -24,7 +21,6 @@ public class AuthenticationController {
         var nickname = authRequest.getNickname();
         var password = authRequest.getPassword();
         return authenticationService.Auth(nickname, password)
-                .then(AuthResponse::new)
-                .mapStatus(mapper::map);
+                .buildResponseEntity(AuthResponse::new);
     }
 }

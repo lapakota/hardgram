@@ -1,13 +1,20 @@
 package hardsign.server.common;
 
+import hardsign.server.common.mapper.StatusMapper;
+import org.springframework.http.ResponseEntity;
+
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class Result<T> {
     private final T value;
     private final Status status;
     private final Status DEFAULT_STATUS = Status.Success;
+
+    private static final StatusMapper statusMapper = new StatusMapper();
 
     private Result(T value, Status status) {
         this.value = value;
@@ -31,6 +38,12 @@ public class Result<T> {
         } catch (Exception e) {
             return Result.fault(status);
         }
+    }
+
+    public static <T> Result<T> fromOptional(Optional<T> optional, Status status) {
+        return optional
+                .map(Result::ok)
+                .orElse(Result.fault(status));
     }
 
     public static <T> Result<T> of(T value, Status status) {
@@ -62,8 +75,17 @@ public class Result<T> {
         return statusMapper.apply(this);
     }
 
+    public <F> ResponseEntity<F> buildResponseEntity(Function<T, F> modelMapper) {
+        return then(() -> modelMapper.apply(get()), Status.ServerError)
+                .mapStatus(statusMapper::map);
+    }
+
     public boolean isSuccess() {
         return status == Status.Success;
+    }
+
+    public boolean isFailure() {
+        return !isSuccess();
     }
 
     public T get() {

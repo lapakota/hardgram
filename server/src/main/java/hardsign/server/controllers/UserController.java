@@ -26,32 +26,24 @@ public class UserController {
     @GetMapping(value = "/me")
     public ResponseEntity<UserModel> me() {
         return currentUserService.getCurrentUser()
-                .map(mapper::mapToModel)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .buildResponseEntity(mapper::mapToModel);
     }
 
     @GetMapping(value = "/user/{userId}")
     public ResponseEntity<UserModel> getById(Long userId) {
         return userService.getUser(userId)
-                .map(mapper::mapToModel)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .buildResponseEntity(mapper::mapToModel);
     }
 
     @GetMapping(value = "/user/{nickname}")
     public ResponseEntity<UserModel> getByNickname(String nickname) {
         return userService.getUser(nickname)
-                .map(mapper::mapToModel)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .buildResponseEntity(mapper::mapToModel);
     }
 
     @PostMapping(value = "/update")
     public ResponseEntity<UserModel> update(@RequestBody UserUpdateModel userUpdateModel) {
         return userService.updateUser(userUpdateModel)
-                .map(mapper::mapToModel)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.badRequest().build());
+                .buildResponseEntity(mapper::mapToModel);
     }
 }

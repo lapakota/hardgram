@@ -1,10 +1,11 @@
-package hardsign.server.common;
+package hardsign.server.common.mapper;
 
+import hardsign.server.common.Result;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Mapper {
+public class StatusMapper {
     public <T> ResponseEntity<T> map(Result<T> result) {
         return switch (result.getStatus()) {
             case Success -> ResponseEntity.ok(result.get());

@@ -23,9 +23,7 @@ public class RegistrationController {
 
     @PostMapping("registration")
     public ResponseEntity<UserModel> registration(@RequestBody UserRegistrationModel userRegistrationModel) {
-        var result = userService.addUser(userRegistrationModel);
-        return result
-                .then(user -> new UserModel(user.nickname))
-                .mapStatus(mapper::map);
+        return userService.addUser(userRegistrationModel)
+                .buildResponseEntity(mapper::mapToModel);
     }
 }

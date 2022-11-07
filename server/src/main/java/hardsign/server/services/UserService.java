@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Optional;
 
 
 @Component
@@ -39,18 +38,18 @@ public class UserService implements UserDetailsService {
         return new User(dbUser.getNickname(), dbUser.getPassword(), new ArrayList<>());
     }
 
-    public Optional<UserEntity> getUser(Long userId) {
-        return userRepository.findById(userId);
+    public Result<UserEntity> getUser(Long userId) {
+        return Result.fromOptional(userRepository.findById(userId), Status.NotFound);
     }
 
-    public Optional<UserEntity> getUser(String nickname) {
-        return Optional.ofNullable(userRepository.findByNickname(nickname));
+    public Result<UserEntity> getUser(String nickname) {
+        return Result.of(userRepository.findByNickname(nickname), Status.NotFound);
     }
 
-    public Optional<UserEntity> updateUser(UserUpdateModel updateUserModel) {
+    public Result<UserEntity> updateUser(UserUpdateModel updateUserModel) {
         return currentUserService.getCurrentUser()
-                .map(user -> update(user, updateUserModel))
-                .map(userRepository::save);
+                .then(user -> update(user, updateUserModel))
+                .then(userRepository::save);
     }
 
     private UserEntity update(UserEntity user, UserUpdateModel updateUserModel) {
@@ -81,7 +80,7 @@ public class UserService implements UserDetailsService {
         var defaultUser = getDefaultUser();
         var dbUser = getUser(defaultUser.getNickname());
 
-        if (dbUser.isEmpty())
+        if (dbUser.isFailure())
             userRepository.save(defaultUser);
     }
 
