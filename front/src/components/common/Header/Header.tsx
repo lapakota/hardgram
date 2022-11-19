@@ -1,15 +1,18 @@
 import React from 'react';
 import styles from './Header.module.scss';
+import { observer } from 'mobx-react-lite';
+import { useStores } from '../../../hooks/useStores';
 
-export const Header = () => {
-  //TODO проверять из userStore
-  const isAuth = false;
+export const Header = observer(() => {
+  const { userInfoStore } = useStores();
 
-  if (!isAuth) return null;
+  if (!userInfoStore.token) return null;
 
   return (
     <header className={styles.header}>
-      <span className={styles.logo}>hardgram</span>
+      <div className={styles.content}>
+        <span className={styles.logo}>hardgram</span>
+      </div>
     </header>
   );
-};
+});

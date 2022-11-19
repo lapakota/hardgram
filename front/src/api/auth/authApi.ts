@@ -1,23 +1,11 @@
-import { AuthRequest } from '../models/AuthRequest';
-import { UserRegistrationModel } from '../models/UserRegistrationModel';
-import { BASE_ROUTE, HTTP_METHODS } from '../utils';
+import { UserRegistrationModel } from '../../typescript/models/Auth/UserRegistrationModel';
+import { AuthRequest } from '../../typescript/models/Auth/AuthRequest';
+import { BASE_ROUTE } from '../utils';
+import axios from 'axios';
 
-export const registerAccount = async (userRegistrationModel: UserRegistrationModel) =>
-  await fetch(BASE_ROUTE + '/registration', {
-    method: HTTP_METHODS.POST,
-    headers: {
-      'Content-Type': 'application/json',
-      accept: '*/*'
-    },
-    body: JSON.stringify(userRegistrationModel)
-  });
+export const registerAccount = async (
+  userRegistrationModel: UserRegistrationModel
+): Promise<Response> => axios.post(`${BASE_ROUTE}/registration`, userRegistrationModel);
 
-export const signIn = async (authRequest: AuthRequest) =>
-  await fetch(BASE_ROUTE + '/auth/login', {
-    method: HTTP_METHODS.POST,
-    headers: {
-      'Content-Type': 'application/json',
-      accept: '*/*'
-    },
-    body: JSON.stringify(authRequest)
-  });
+export const signIn = async (authRequest: AuthRequest): Promise<{ token: string }> =>
+  axios.post(`${BASE_ROUTE}/auth/login`, authRequest).then((x) => x.data);

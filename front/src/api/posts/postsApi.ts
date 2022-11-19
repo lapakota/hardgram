@@ -1,39 +1,17 @@
-import { BASE_ROUTE, HTTP_METHODS } from '../utils';
-import { PostModelCreate } from '../models/Post/PostModelCreate';
+import { PostModelCreate } from '../../typescript/models/Post/PostModelCreate';
+import { BASE_ROUTE } from '../utils';
+import axios from 'axios';
+import { PostModel } from '../../typescript/models/Post/PostModel';
 
 export const create = async (post: PostModelCreate): Promise<Response> =>
-  await fetch(`${BASE_ROUTE}/post/create`, {
-    method: HTTP_METHODS.POST,
-    headers: {
-      'Content-Type': 'application/json',
-      accept: '*/*'
-    },
-    body: JSON.stringify(post)
-  });
+  axios.post(`${BASE_ROUTE}/post/create`, post);
 
-export const getPost = async (postId: string): Promise<Response> =>
-  await fetch(`${BASE_ROUTE}/post/${postId}`, {
-    method: HTTP_METHODS.GET,
-    headers: {
-      'Content-Type': 'application/json',
-      accept: '*/*'
-    }
-  });
+// TODO ЧЗХ?
+export const getPost = async (postId: number): Promise<PostModel> =>
+  axios.get(`${BASE_ROUTE}/post/%7BpostId%7D?postId=${postId}`).then((x) => x.data);
 
-export const getPosts = async (userId: string): Promise<Response> =>
-  await fetch(`${BASE_ROUTE}/posts/${userId}`, {
-    method: HTTP_METHODS.GET,
-    headers: {
-      'Content-Type': 'application/json',
-      accept: '*/*'
-    }
-  });
+export const getUserPosts = async (userId: string): Promise<PostModel[]> =>
+  axios.get(`${BASE_ROUTE}/posts/%7BuserId%7D?userId=${userId}`).then((x) => x.data);
 
 export const deletePost = async (postId: string): Promise<Response> =>
-  await fetch(`${BASE_ROUTE}/post/delete/${postId}`, {
-    method: HTTP_METHODS.GET,
-    headers: {
-      'Content-Type': 'application/json',
-      accept: '*/*'
-    }
-  });
+  axios.post(`${BASE_ROUTE}/post/delete/${postId}`);

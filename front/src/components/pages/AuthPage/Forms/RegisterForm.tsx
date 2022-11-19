@@ -1,36 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { NavLink } from 'react-router-dom';
-import { registerAccount } from '../../../api/auth/authApi';
-import { UserRegistrationModel } from '../../../api/models/UserRegistrationModel';
-import { FormInputText } from '../../common/FormInputText/FormInputText';
+import { Navigate, NavLink } from 'react-router-dom';
+import { registerAccount } from '../../../../api/auth/authApi';
+import { FormInputText } from '../../../common/Controls/FormInputText';
 import {
   REQUIRED_FIELD_ERROR_MESSAGE,
   SHORT_FULL_NAME_ERROR_MESSAGE,
   SHORT_LOGIN_ERROR_MESSAGE,
   SHORT_PASSWORD_ERROR_MESSAGE
 } from './constants';
-import { HardgramLogo } from '../../common/HardgramLogo/HardgramLogo';
+import { HardgramLogo } from '../../../common/HardgramLogo/HardgramLogo';
 import styles from './AuthForms.module.scss';
+import { UserRegistrationModel } from '../../../../typescript/models/Auth/UserRegistrationModel';
+import Toast from '../../../common/Toast/Toast';
+
+interface FormValues {
+  nickname: string;
+  fullName: string;
+  password: string;
+}
 
 export const RegisterForm = () => {
+  const [showErrorToast, setShowErrorToast] = useState<boolean>(false);
+  const [needRedirect, setNeedRedirect] = useState<boolean>(false);
+
   const {
     handleSubmit,
     control,
     formState: { errors }
-  } = useForm();
+  } = useForm<FormValues>();
 
   const onRegister = async (formData: UserRegistrationModel) => {
     try {
       await registerAccount(formData);
+      setNeedRedirect(true);
     } catch (e) {
-      console.log(e);
+      setShowErrorToast(true);
     }
   };
-  const onSubmit = (data: any) => {
-    onRegister(data).then((x) => console.log(x));
-  };
+
+  if (needRedirect) return <Navigate to={`/auth/login`} replace />;
 
   return (
     <form className={styles.form}>
@@ -64,13 +74,13 @@ export const RegisterForm = () => {
             label={'Password'}
             rules={{
               required: { value: true, message: REQUIRED_FIELD_ERROR_MESSAGE },
-              minLength: { value: 6, message: SHORT_PASSWORD_ERROR_MESSAGE }
+              minLength: { value: 5, message: SHORT_PASSWORD_ERROR_MESSAGE }
             }}
             errors={errors}
             fieldType={'password'}
             required
           />
-          <Button onClick={handleSubmit(onSubmit)} variant={'contained'}>
+          <Button onClick={handleSubmit(onRegister)} variant={'contained'}>
             Sign up
           </Button>
         </div>
@@ -78,6 +88,12 @@ export const RegisterForm = () => {
       <div className={styles.additional}>
         Already have an account? &nbsp; <NavLink to={'/auth/login'}>Sign in</NavLink>
       </div>
+      <Toast
+        isOpen={showErrorToast}
+        setIsOpen={setShowErrorToast}
+        toastType={'error'}
+        message={'Failed to register, please try again'}
+      />
     </form>
   );
 };

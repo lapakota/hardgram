@@ -1,0 +1,11 @@
+@import "src/styles/variables";
+
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .content {
+    width: $content-width;
+  }
+}

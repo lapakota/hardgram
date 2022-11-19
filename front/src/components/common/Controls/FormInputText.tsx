@@ -1,15 +1,13 @@
 import { TextField } from '@mui/material';
 import React from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, FieldErrors, UseControllerProps } from 'react-hook-form';
 
-interface FormInputTextProps {
-  name: string;
-  control: any;
+interface FormInputTextProps extends UseControllerProps {
   label?: string;
-  rules?: any;
-  errors?: any;
+  errors?: FieldErrors;
   required?: boolean;
-  fieldType?: React.InputHTMLAttributes<unknown>['type'];
+  fieldType?: React.HTMLInputTypeAttribute;
+  control: any;
 }
 
 export const FormInputText = ({
@@ -32,7 +30,7 @@ export const FormInputText = ({
           value={value}
           label={label}
           error={errors && !!errors[name]}
-          helperText={errors && errors[name] ? errors[name].message : ''}
+          helperText={errors ? <>{errors[name]?.message}</> : <></>}
           type={fieldType}
         />
       )}
