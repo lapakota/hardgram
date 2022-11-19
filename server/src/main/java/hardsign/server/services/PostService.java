@@ -31,7 +31,7 @@ public class PostService {
     public Result<PostEntity> updatePost(UpdatePostModel updatePostModel) {
         return Result.fromOptional(postRepository.findById(updatePostModel.getPostId()), Status.NotFound)
                 .then(post -> update(post, updatePostModel))
-                .then(postRepository::save, Status.ServerError);
+                .then(postRepository::save);
     }
 
     public Result<String> deletePost(Long postId) {
@@ -44,7 +44,7 @@ public class PostService {
     public Result<PostEntity> createPost(CreatePostModel createPostModel) {
         return currentUserService.getCurrentUser()
                 .then(user -> createPostEntity(user, createPostModel))
-                .then(postRepository::save, Status.ServerError);
+                .then(postRepository::save);
     }
 
     private PostEntity update(PostEntity post, UpdatePostModel updatePostModel) {

@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 public class Result<T> {
     private final T value;
     private final Status status;
-    private final Status DEFAULT_STATUS = Status.Success;
+    private static final Status DEFAULT_FAULT_STATUS = Status.Success;
 
     private static final StatusMapper statusMapper = new StatusMapper();
 
@@ -40,6 +40,10 @@ public class Result<T> {
         }
     }
 
+    public static <T> Result<T> of(Supplier<T> function) {
+        return Result.of(function, DEFAULT_FAULT_STATUS);
+    }
+
     public static <T> Result<T> fromOptional(Optional<T> optional, Status status) {
         return optional
                 .map(Result::ok)
@@ -52,10 +56,18 @@ public class Result<T> {
         return Result.ok(value);
     }
 
+    public static <T> Result<T> of(T value) {
+        return Result.of(value, DEFAULT_FAULT_STATUS);
+    }
+
     public <F> Result<F> then(Supplier<F> function, Status status) {
         if (isSuccess())
             return Result.of(function, status);
         return Result.fault(getStatus());
+    }
+
+    public <F> Result<F> then(Supplier<F> function) {
+        return then(function, DEFAULT_FAULT_STATUS);
     }
 
     public <F> Result<F> then(Function<T, F> function, Status status) {
@@ -65,10 +77,9 @@ public class Result<T> {
     }
 
     public <F> Result<F> then(Function<T, F> function) {
-        var currentStatus = getStatus();
-        if (currentStatus != Status.Success)
-            return then(function, currentStatus);
-        return then(function, DEFAULT_STATUS);
+        if (status != Status.Success)
+            return then(function, status);
+        return then(function, Status.Success);
     }
 
     public <F> F mapStatus(Function<Result<T>, F> statusMapper) {
@@ -76,7 +87,7 @@ public class Result<T> {
     }
 
     public <F> ResponseEntity<F> buildResponseEntity(Function<T, F> modelMapper) {
-        return then(() -> modelMapper.apply(get()), Status.ServerError)
+        return then(() -> modelMapper.apply(get()))
                 .mapStatus(statusMapper::map);
     }
 

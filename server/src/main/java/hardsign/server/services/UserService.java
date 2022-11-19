@@ -67,7 +67,7 @@ public class UserService implements UserDetailsService {
         }
 
         return Result
-                .of(() -> map(userRegistrationModel), Status.ServerError)
+                .of(() -> map(userRegistrationModel))
                 .then(userRepository::save);
     }
 

@@ -1,7 +1,9 @@
 package hardsign.server.common.mapper;
 
+import hardsign.server.entities.CommentEntity;
 import hardsign.server.entities.PostEntity;
 import hardsign.server.entities.UserEntity;
+import hardsign.server.models.comment.CommentModel;
 import hardsign.server.models.post.PostModel;
 import hardsign.server.models.user.UserModel;
 import org.springframework.stereotype.Component;
@@ -19,5 +21,13 @@ public class Mapper {
     public UserModel mapToModel(UserEntity user) {
         var posts = user.getPosts().stream().map(this::mapToModel).toList();
         return new UserModel(user.getId(), user.getNickname(), user.getFullName(), user.getAvatar(), posts);
+    }
+
+    public CommentModel mapToModel(CommentEntity comment) {
+        return new CommentModel(comment.getId(),
+                comment.getPost().getId(),
+                comment.getUser().getId(),
+                comment.getText(),
+                comment.getCreateTime());
     }
 }

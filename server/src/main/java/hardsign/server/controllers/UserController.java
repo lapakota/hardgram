@@ -41,7 +41,7 @@ public class UserController {
                 .buildResponseEntity(mapper::mapToModel);
     }
 
-    @PostMapping(value = "/update")
+    @PostMapping(value = "/user/update")
     public ResponseEntity<UserModel> update(@RequestBody UserUpdateModel userUpdateModel) {
         return userService.updateUser(userUpdateModel)
                 .buildResponseEntity(mapper::mapToModel);
