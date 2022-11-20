@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 
 @RestController
+@CrossOrigin
 public class UserController {
     private final CurrentUserService  currentUserService;
     private final UserService userService;
@@ -26,14 +27,6 @@ public class UserController {
     @GetMapping(value = "/me")
     public ResponseEntity<UserModel> me() {
         return currentUserService.getCurrentUser()
-                .map(mapper::mapToModel)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @GetMapping(value = "/user/{userId}")
-    public ResponseEntity<UserModel> getById(Long userId) {
-        return userService.getUser(userId)
                 .map(mapper::mapToModel)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
