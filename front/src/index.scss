@@ -1,3 +1,5 @@
+@import "src/styles/variables";
+
 html, body {
   width: 100%;
   height: 100%;
@@ -6,6 +8,7 @@ html, body {
 
 #root {
   width: 100%;
+  min-width: $content-width + $layout-padding * 2;
   height: 100%;
   display: flex;
   flex-direction: column;

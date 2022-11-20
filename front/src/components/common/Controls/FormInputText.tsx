@@ -7,6 +7,7 @@ interface FormInputTextProps extends UseControllerProps {
   errors?: FieldErrors;
   required?: boolean;
   fieldType?: React.HTMLInputTypeAttribute;
+  multiline?: boolean;
   control: any;
 }
 
@@ -17,6 +18,7 @@ export const FormInputText = ({
   rules,
   errors,
   required,
+  multiline,
   fieldType
 }: FormInputTextProps) => {
   return (
@@ -32,6 +34,7 @@ export const FormInputText = ({
           error={errors && !!errors[name]}
           helperText={errors ? <>{errors[name]?.message}</> : <></>}
           type={fieldType}
+          multiline={multiline}
         />
       )}
       rules={rules}

@@ -1,6 +1,6 @@
-import { UserRegistrationModel } from '../../typescript/models/Auth/UserRegistrationModel';
-import { AuthRequest } from '../../typescript/models/Auth/AuthRequest';
-import { BASE_ROUTE } from '../utils';
+import { UserRegistrationModel } from '../typescript/models/Auth/UserRegistrationModel';
+import { AuthRequest } from '../typescript/models/Auth/AuthRequest';
+import { BASE_ROUTE } from './utils';
 import axios from 'axios';
 
 export const registerAccount = async (

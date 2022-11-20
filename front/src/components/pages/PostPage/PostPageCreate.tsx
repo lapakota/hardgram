@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Button } from '@mui/material';
-import { create } from '../../../api/posts/postsApi';
+import { create } from '../../../api/postsApi';
 
 export function PostPageCreate(): React.ReactElement {
   const [text, setText] = useState<string>();

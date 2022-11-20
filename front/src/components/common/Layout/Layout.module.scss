@@ -1,0 +1,8 @@
+@import "src/styles/variables";
+
+.layout {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: $base-size * 3;
+}
