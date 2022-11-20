@@ -37,10 +37,6 @@ public class UserService implements UserDetailsService {
         return new User(dbUser.getNickname(), dbUser.getPassword(), new ArrayList<>());
     }
 
-    public Optional<UserEntity> getUser(Long userId) {
-        return userRepository.findById(userId);
-    }
-
     public Optional<UserEntity> getUser(String nickname) {
         return Optional.ofNullable(userRepository.findByNickname(nickname));
     }

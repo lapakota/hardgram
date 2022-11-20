@@ -33,9 +33,9 @@ public class PostController {
         return ResponseEntity.ok(postModel);
     }
 
-    @GetMapping(value = "/posts/{userId}")
-    public ResponseEntity<List<PostModel>> getPostsByUserId(Long userId) {
-        var postEntityList = userService.getUser(userId).get().getPosts();
+    @GetMapping(value = "/posts/{userName}")
+    public ResponseEntity<List<PostModel>> getPostsByUserId(String userName) {
+        var postEntityList = userService.getUser(userName).get().getPosts();
         var postModels = postEntityList.stream().map(mapper::mapToModel).toList();
         return ResponseEntity.ok(postModels);
     }
