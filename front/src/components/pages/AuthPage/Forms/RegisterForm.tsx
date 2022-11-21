@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { Navigate, NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { registerAccount } from '../../../../api/authApi';
 import { FormInputText } from '../../../common/Controls/FormInputText';
 import { HardgramLogo } from '../../../common/HardgramLogo/HardgramLogo';
@@ -21,8 +21,10 @@ interface FormValues {
 }
 
 export const RegisterForm = () => {
+  const [showSuccessToast, setShowSuccessToast] = useState<boolean>(false);
   const [showErrorToast, setShowErrorToast] = useState<boolean>(false);
-  const [needRedirect, setNeedRedirect] = useState<boolean>(false);
+
+  const navigate = useNavigate();
 
   const {
     handleSubmit,
@@ -33,13 +35,12 @@ export const RegisterForm = () => {
   const onRegister = async (formData: UserRegistrationModel) => {
     try {
       await registerAccount(formData);
-      setNeedRedirect(true);
+      setShowSuccessToast(true);
+      navigate(`/auth/login`);
     } catch (e) {
       setShowErrorToast(true);
     }
   };
-
-  if (needRedirect) return <Navigate to={`/auth/login`} replace />;
 
   return (
     <form className={styles.form}>
@@ -83,6 +84,12 @@ export const RegisterForm = () => {
         setIsOpen={setShowErrorToast}
         toastType={'error'}
         message={'Failed to register, please try again'}
+      />
+      <Toast
+        isOpen={showSuccessToast}
+        setIsOpen={setShowSuccessToast}
+        toastType={'success'}
+        message={'Registration complete! Please log in.'}
       />
     </form>
   );

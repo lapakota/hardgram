@@ -28,11 +28,8 @@
     .posts {
       padding-top: $base-size * 3;
       border-top: 1px solid #DBDBDB;
-
-      .postsPreviews {
-
-      }
-
+      display: flex;
+      justify-content: center;
     }
   }
 }

@@ -6,8 +6,6 @@ import { LoginForm } from '../components/pages/AuthPage/Forms/LoginForm';
 import { RegisterForm } from '../components/pages/AuthPage/Forms/RegisterForm';
 import { MainPage } from '../components/pages/MainPage/MainPage';
 import styles from './App.module.scss';
-import { PostPageView } from '../components/pages/PostPage/PostPageView';
-import { PostPageCreate } from '../components/pages/PostPage/PostPageCreate';
 import { ProfilePage } from '../components/pages/ProfilePage/ProfilePage';
 import { AuthPage } from '../components/pages/AuthPage';
 import { SettingsPage } from '../components/pages/SettingsPage/SettingsPage';
@@ -23,8 +21,6 @@ function App() {
               <Route path={'login'} element={<LoginForm />} />
               <Route path={'register'} element={<RegisterForm />} />
             </Route>
-            <Route path={'/post/view'} element={<PostPageView />} />
-            <Route path={'/post/create'} element={<PostPageCreate />} />
             <Route
               path="/user/profile/:nickname"
               element={

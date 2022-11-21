@@ -8,6 +8,8 @@ interface FormInputTextProps extends UseControllerProps {
   required?: boolean;
   fieldType?: React.HTMLInputTypeAttribute;
   multiline?: boolean;
+  defaultValue?: string;
+  disabled?: boolean;
   control: any;
 }
 
@@ -19,6 +21,8 @@ export const FormInputText = ({
   errors,
   required,
   multiline,
+  defaultValue,
+  disabled,
   fieldType
 }: FormInputTextProps) => {
   return (
@@ -27,6 +31,8 @@ export const FormInputText = ({
       control={control}
       render={({ field: { onChange, value } }) => (
         <TextField
+          disabled={disabled}
+          defaultValue={defaultValue}
           required={required}
           onChange={onChange}
           value={value}
