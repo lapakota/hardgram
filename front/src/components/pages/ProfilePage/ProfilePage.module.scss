@@ -7,5 +7,29 @@
 
   .content {
     width: $content-width;
+
+    .userInfoHeader {
+      position: relative;
+      padding: 0 0 $base-size * 3 $base-size * 9;
+
+      .userNickname {
+        margin: 0;
+        font-weight: lighter;
+        font-size: 26px;
+      }
+
+      .addPostButton {
+        position: absolute;
+        right: 0;
+        bottom: $base-size * 3;
+      }
+    }
+
+    .posts {
+      padding-top: $base-size * 3;
+      border-top: 1px solid #DBDBDB;
+      display: flex;
+      justify-content: center;
+    }
   }
 }

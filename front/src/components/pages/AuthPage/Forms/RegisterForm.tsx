@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
 import { Button } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { Navigate, NavLink } from 'react-router-dom';
-import { registerAccount } from '../../../../api/auth/authApi';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { registerAccount } from '../../../../api/authApi';
 import { FormInputText } from '../../../common/Controls/FormInputText';
-import {
-  REQUIRED_FIELD_ERROR_MESSAGE,
-  SHORT_FULL_NAME_ERROR_MESSAGE,
-  SHORT_LOGIN_ERROR_MESSAGE,
-  SHORT_PASSWORD_ERROR_MESSAGE
-} from './constants';
 import { HardgramLogo } from '../../../common/HardgramLogo/HardgramLogo';
 import styles from './AuthForms.module.scss';
 import { UserRegistrationModel } from '../../../../typescript/models/Auth/UserRegistrationModel';
 import Toast from '../../../common/Toast/Toast';
+import {
+  FULL_NAME_RULES,
+  LOGIN_RULES,
+  PASSWORD_RULES
+} from '../../../../utils/validation/validationRules';
 
 interface FormValues {
   nickname: string;
@@ -22,8 +21,10 @@ interface FormValues {
 }
 
 export const RegisterForm = () => {
+  const [showSuccessToast, setShowSuccessToast] = useState<boolean>(false);
   const [showErrorToast, setShowErrorToast] = useState<boolean>(false);
-  const [needRedirect, setNeedRedirect] = useState<boolean>(false);
+
+  const navigate = useNavigate();
 
   const {
     handleSubmit,
@@ -34,13 +35,12 @@ export const RegisterForm = () => {
   const onRegister = async (formData: UserRegistrationModel) => {
     try {
       await registerAccount(formData);
-      setNeedRedirect(true);
+      setShowSuccessToast(true);
+      navigate(`/auth/login`);
     } catch (e) {
       setShowErrorToast(true);
     }
   };
-
-  if (needRedirect) return <Navigate to={`/auth/login`} replace />;
 
   return (
     <form className={styles.form}>
@@ -51,10 +51,7 @@ export const RegisterForm = () => {
             name={'nickname'}
             control={control}
             label={'Login'}
-            rules={{
-              required: { value: true, message: REQUIRED_FIELD_ERROR_MESSAGE },
-              minLength: { value: 3, message: SHORT_LOGIN_ERROR_MESSAGE }
-            }}
+            rules={LOGIN_RULES}
             errors={errors}
             required
           />
@@ -62,20 +59,14 @@ export const RegisterForm = () => {
             name={'fullName'}
             control={control}
             label={'Full name'}
-            rules={{
-              required: false,
-              minLength: { value: 3, message: SHORT_FULL_NAME_ERROR_MESSAGE }
-            }}
+            rules={FULL_NAME_RULES}
             errors={errors}
           />
           <FormInputText
             name={'password'}
             control={control}
             label={'Password'}
-            rules={{
-              required: { value: true, message: REQUIRED_FIELD_ERROR_MESSAGE },
-              minLength: { value: 5, message: SHORT_PASSWORD_ERROR_MESSAGE }
-            }}
+            rules={PASSWORD_RULES}
             errors={errors}
             fieldType={'password'}
             required
@@ -93,6 +84,12 @@ export const RegisterForm = () => {
         setIsOpen={setShowErrorToast}
         toastType={'error'}
         message={'Failed to register, please try again'}
+      />
+      <Toast
+        isOpen={showSuccessToast}
+        setIsOpen={setShowSuccessToast}
+        toastType={'success'}
+        message={'Registration complete! Please log in.'}
       />
     </form>
   );

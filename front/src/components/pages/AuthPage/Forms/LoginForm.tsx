@@ -2,20 +2,16 @@ import React, { useState } from 'react';
 import { Button } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { signIn } from '../../../../api/auth/authApi';
+import { signIn } from '../../../../api/authApi';
 import { FormInputText } from '../../../common/Controls/FormInputText';
 import { AuthRequest } from '../../../../typescript/models/Auth/AuthRequest';
-import {
-  REQUIRED_FIELD_ERROR_MESSAGE,
-  SHORT_LOGIN_ERROR_MESSAGE,
-  SHORT_PASSWORD_ERROR_MESSAGE
-} from './constants';
 import { HardgramLogo } from '../../../common/HardgramLogo/HardgramLogo';
 import styles from './AuthForms.module.scss';
 import { useStores } from '../../../../hooks/useStores';
-import { me } from '../../../../api/user/userApi';
+import { me } from '../../../../api/userApi';
 import { observer } from 'mobx-react-lite';
 import Toast from '../../../common/Toast/Toast';
+import { LOGIN_RULES, PASSWORD_RULES } from '../../../../utils/validation/validationRules';
 
 interface FormValues {
   nickname: string;
@@ -41,7 +37,7 @@ export const LoginForm = observer(() => {
       const userInfo = await me(token);
 
       userInfoStore.initStore(userInfo, token);
-      navigate(`/user/profile/${userInfoStore.userInfo?.id}`);
+      navigate(`/user/profile/${userInfoStore.userInfo?.nickname}`);
     } catch (e) {
       setShowErrorToast(true);
     }
@@ -56,10 +52,7 @@ export const LoginForm = observer(() => {
             name={'nickname'}
             control={control}
             label={'Login'}
-            rules={{
-              required: { value: true, message: REQUIRED_FIELD_ERROR_MESSAGE },
-              minLength: { value: 3, message: SHORT_LOGIN_ERROR_MESSAGE }
-            }}
+            rules={LOGIN_RULES}
             errors={errors}
             required
           />
@@ -67,10 +60,7 @@ export const LoginForm = observer(() => {
             name={'password'}
             control={control}
             label={'Password'}
-            rules={{
-              required: { value: true, message: REQUIRED_FIELD_ERROR_MESSAGE },
-              minLength: { value: 5, message: SHORT_PASSWORD_ERROR_MESSAGE }
-            }}
+            rules={PASSWORD_RULES}
             errors={errors}
             fieldType={'password'}
             required

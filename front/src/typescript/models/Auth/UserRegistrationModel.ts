@@ -1,5 +1,5 @@
 export interface UserRegistrationModel {
   nickname: string;
-  fullName: string;
+  fullName?: string;
   password: string;
 }

@@ -7,6 +7,9 @@ interface FormInputTextProps extends UseControllerProps {
   errors?: FieldErrors;
   required?: boolean;
   fieldType?: React.HTMLInputTypeAttribute;
+  multiline?: boolean;
+  defaultValue?: string;
+  disabled?: boolean;
   control: any;
 }
 
@@ -17,6 +20,9 @@ export const FormInputText = ({
   rules,
   errors,
   required,
+  multiline,
+  defaultValue,
+  disabled,
   fieldType
 }: FormInputTextProps) => {
   return (
@@ -25,6 +31,8 @@ export const FormInputText = ({
       control={control}
       render={({ field: { onChange, value } }) => (
         <TextField
+          disabled={disabled}
+          defaultValue={defaultValue}
           required={required}
           onChange={onChange}
           value={value}
@@ -32,6 +40,7 @@ export const FormInputText = ({
           error={errors && !!errors[name]}
           helperText={errors ? <>{errors[name]?.message}</> : <></>}
           type={fieldType}
+          multiline={multiline}
         />
       )}
       rules={rules}

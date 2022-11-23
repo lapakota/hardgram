@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: $base-size * 8;
+  height: $header-height;
   background: #FFF;
 
   .content {
@@ -13,6 +13,9 @@
     .logo {
       font-family: 'Billabong', sans-serif;
       font-size: 38px;
+      color: #000;
+      text-decoration: none;
+      user-select: none;
     }
   }
 
