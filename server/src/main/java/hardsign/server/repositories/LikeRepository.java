@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface LikeRepository  extends CrudRepository<LikeEntity, Long> {
@@ -13,5 +14,5 @@ public interface LikeRepository  extends CrudRepository<LikeEntity, Long> {
                               @Param("postId") Long postId);
 
     @Query(value = "select * from likes l WHERE l.post_id = :postId", nativeQuery=true)
-    Optional<LikeEntity>[] findLikes(@Param("postId") Long postId);
+    List<Optional<LikeEntity>> findLikes(@Param("postId") Long postId);
 }

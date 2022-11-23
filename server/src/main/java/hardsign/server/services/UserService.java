@@ -4,6 +4,7 @@ import hardsign.server.entities.UserEntity;
 import hardsign.server.models.user.UserRegistrationModel;
 import hardsign.server.models.user.UserUpdateModel;
 import hardsign.server.repositories.UserRepository;
+import hardsign.server.utils.Helper;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,14 +21,16 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final CurrentUserService currentUserService;
     private final PasswordEncoderService encoder;
+    private final Helper helper;
 
     @Inject
     public UserService(
             UserRepository userRepository,
-            CurrentUserService currentUserService, PasswordEncoderService encoder) {
+            CurrentUserService currentUserService, PasswordEncoderService encoder, Helper helper) {
         this.userRepository = userRepository;
         this.currentUserService = currentUserService;
         this.encoder = encoder;
+        this.helper = helper;
         AddDefaultUser();
     }
 
@@ -48,7 +51,7 @@ public class UserService implements UserDetailsService {
     }
 
     private UserEntity update(UserEntity user, UserUpdateModel updateUserModel) {
-        user.setAvatar(updateUserModel.getAvatar());
+        user.setAvatar(helper.encodeStringToBase64(updateUserModel.getAvatar()));
         user.setFullName(updateUserModel.getFullName());
         return user;
     }
@@ -67,7 +70,7 @@ public class UserService implements UserDetailsService {
 
     private UserEntity map(UserRegistrationModel model) {
         var password = encoder.getEncoder().encode(model.getPassword());
-        return new UserEntity(model.getNickname(), model.getFullName(), model.getAvatar(), password);
+        return new UserEntity(model.getNickname(), model.getFullName(), helper.encodeStringToBase64(model.getAvatar()), password);
     }
 
     private void AddDefaultUser() {

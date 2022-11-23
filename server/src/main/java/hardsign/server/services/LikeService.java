@@ -38,7 +38,7 @@ public class LikeService {
     }
 
     public Number getCountLikes(Long postId){
-        return likeRepository.findLikes(postId).length;
+        return likeRepository.findLikes(postId).size();
     }
 
 }

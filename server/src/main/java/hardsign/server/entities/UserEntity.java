@@ -9,7 +9,7 @@ import java.util.List;
 public class UserEntity {
     public UserEntity() { }
 
-    public UserEntity(String nickname, String fullName, String avatar, String password) {
+    public UserEntity(String nickname, String fullName, byte[] avatar, String password) {
         this.id = 0L;
         this.nickname = nickname;
         this.fullName = fullName;
@@ -29,7 +29,7 @@ public class UserEntity {
     private String nickname;
 
     @Column(name = "avatar")
-    private String avatar;
+    private byte[] avatar;
 
     @Column(name = "password", nullable = false)
     private String password;
@@ -57,11 +57,11 @@ public class UserEntity {
         this.nickname = nickname;
     }
 
-    public String getAvatar() {
+    public byte[] getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(String avatar) {
+    public void setAvatar(byte[] avatar) {
         this.avatar = avatar;
     }
 
