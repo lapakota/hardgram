@@ -31,7 +31,7 @@ public class Mapper {
         return likeService.IsLikedPostByUserFuckingMe(post.getUser().getId(), post.getId());
     }
 
-    private Number getCountLikes(Long postId) {
-        return likeService.getCountLikes(postId);
+    private Long getCountLikes(Long postId) {
+        return likeService.getCountLikes(postId).longValue();
     }
 }
