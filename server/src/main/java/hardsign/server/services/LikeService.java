@@ -37,4 +37,8 @@ public class LikeService {
         return !likeRepository.findLike(userId, postId).isEmpty();
     }
 
+    public Number getCountLikes(Long postId){
+        return likeRepository.findLikes(postId).length;
+    }
+
 }

@@ -11,4 +11,7 @@ public interface LikeRepository  extends CrudRepository<LikeEntity, Long> {
     @Query(value = "select * from likes l WHERE l.user_id = :userId and l.post_id = :postId", nativeQuery=true)
     Optional<LikeEntity> findLike(@Param("userId") Long userId,
                               @Param("postId") Long postId);
+
+    @Query(value = "select * from likes l WHERE l.post_id = :postId", nativeQuery=true)
+    Optional<LikeEntity>[] findLikes(@Param("postId") Long postId);
 }

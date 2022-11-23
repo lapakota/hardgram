@@ -16,7 +16,7 @@ public class Mapper {
     }
 
     public PostModel mapToModel(PostEntity post) {
-        return new PostModel(post.getId(), post.getUser().getId(), post.getPhotos(), post.getCreateTime(), post.getDescription(), getUserLike(post));
+        return new PostModel(post.getId(), post.getUser().getId(), post.getPhotos(), post.getCreateTime(), post.getDescription(), getUserLike(post), getCountLikes(post.getId()));
     }
 
     public UserModel mapToModel(UserEntity user) {
@@ -26,5 +26,9 @@ public class Mapper {
 
     private Boolean getUserLike(PostEntity post) {
         return likeService.IsLikedPostByUserFuckingMe(post.getUser().getId(), post.getId());
+    }
+
+    private Number getCountLikes(Long postId) {
+        return likeService.getCountLikes(postId);
     }
 }

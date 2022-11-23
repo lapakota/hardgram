@@ -1,6 +1,7 @@
 package hardsign.server.controllers;
 
 import hardsign.server.common.mapper.Mapper;
+import hardsign.server.entities.PostEntity;
 import hardsign.server.models.post.CreatePostModel;
 import hardsign.server.models.post.PostModel;
 import hardsign.server.models.post.UpdatePostModel;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -36,7 +38,7 @@ public class PostController {
     @GetMapping(value = "/posts/{userName}")
     public ResponseEntity<List<PostModel>> getPostsByUserId(String userName) {
         var postEntityList = userService.getUser(userName).get().getPosts();
-        var postModels = postEntityList.stream().map(mapper::mapToModel).toList();
+        var postModels = postEntityList.stream().sorted(Comparator.comparing(PostEntity::getCreateTime)).map(mapper::mapToModel).toList();
         return ResponseEntity.ok(postModels);
     }
 
