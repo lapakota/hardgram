@@ -1,5 +1,6 @@
 package hardsign.server.utils;
 
+import org.hibernate.mapping.Array;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -12,7 +13,7 @@ public class Helper {
             return new String(Base64.getDecoder().decode(array));
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return "Пошел нахуй";
+            return "";
         }
     }
 
@@ -22,7 +23,7 @@ public class Helper {
             return Base64.getEncoder().encode(str.getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return Base64.getEncoder().encode("Пошел нахуй".getBytes(StandardCharsets.UTF_8));
+            return new byte[] {};
         }
     }
 }
