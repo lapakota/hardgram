@@ -38,7 +38,7 @@ public class PostController {
     @GetMapping(value = "/posts/{userName}")
     public ResponseEntity<List<PostModel>> getPostsByNickname(String userName) {
         var postEntityList = userService.getUser(userName).get().getPosts();
-        var postModels = postEntityList.stream().sorted(Comparator.comparing(PostEntity::getCreateTime)).map(mapper::mapToModel).toList();
+        var postModels = postEntityList.stream().sorted((x,y)-> y.getCreateTime().compareTo(x.getCreateTime())).map(mapper::mapToModel).toList();
         return ResponseEntity.ok(postModels);
     }
 
