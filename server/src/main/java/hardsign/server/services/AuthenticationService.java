@@ -20,7 +20,7 @@ public class AuthenticationService {
         this.tokenProvider = tokenProvider;
     }
 
-    public String Auth(String nickname, String password) throws AuthenticationException {
+    public String auth(String nickname, String password) throws AuthenticationException {
         var authToken = new UsernamePasswordAuthenticationToken(nickname, password);
         authenticationManager.authenticate(authToken);
 

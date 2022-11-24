@@ -19,9 +19,9 @@ public class LikeController {
     }
 
     @PostMapping(path = "/like/add/{postId}")
-    public ResponseEntity Add(Long postId) {
+    public ResponseEntity add(Long postId) {
         try {
-           likeService.AddLike(postId);
+           likeService.addLike(postId);
            return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
@@ -29,9 +29,9 @@ public class LikeController {
     }
 
     @PostMapping(path = "/like/delete/{postId}")
-    public ResponseEntity Delete(Long postId) {
+    public ResponseEntity delete(Long postId) {
         try {
-            likeService.DeleteLike(postId);
+            likeService.deleteLike(postId);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();

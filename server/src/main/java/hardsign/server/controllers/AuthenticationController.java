@@ -23,7 +23,7 @@ public class AuthenticationController {
         var password = authRequest.getPassword();
 
         try {
-            var token = authenticationService.Auth(nickname, password);
+            var token = authenticationService.auth(nickname, password);
             return ResponseEntity.ok(new AuthResponse(token));
         } catch (AuthenticationException e) {
             return ResponseEntity

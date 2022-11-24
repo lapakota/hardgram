@@ -28,7 +28,7 @@ public class Mapper {
     }
 
     private Boolean getUserLike(PostEntity post) {
-        return likeService.IsLikedPostByUserFuckingMe(post.getUser().getId(), post.getId());
+        return likeService.isLikedPostByUser(post.getUser().getId(), post.getId());
     }
 
     private Long getCountLikes(Long postId) {

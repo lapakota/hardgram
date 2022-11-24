@@ -20,20 +20,20 @@ public class LikeService {
         this.postRepository = postRepository;
     }
 
-    public void AddLike(Long postId){
+    public void addLike(Long postId){
         var user = currentUserService.getCurrentUser().get();
         var post = postRepository.findById(postId).get();
         var like = new LikeEntity(user, post);
         likeRepository.save(like);
     }
 
-    public void DeleteLike(Long postId){
+    public void deleteLike(Long postId){
         var userId = currentUserService.getCurrentUser().get().getId();
         var like = likeRepository.findLike(userId, postId).get();
         likeRepository.deleteById(like.getId());
     }
 
-    public Boolean IsLikedPostByUserFuckingMe(Long userId, Long postId){
+    public Boolean isLikedPostByUser(Long userId, Long postId){
         return !likeRepository.findLike(userId, postId).isEmpty();
     }
 

@@ -31,7 +31,7 @@ public class UserService implements UserDetailsService {
         this.currentUserService = currentUserService;
         this.encoder = encoder;
         this.helper = helper;
-        AddDefaultUser();
+        addDefaultUser();
     }
 
     @Override
@@ -73,7 +73,7 @@ public class UserService implements UserDetailsService {
         return new UserEntity(model.getNickname(), model.getFullName(), helper.encodeStringToBase64(model.getAvatar()), password);
     }
 
-    private void AddDefaultUser() {
+    private void addDefaultUser() {
         var defaultUser = getDefaultUser();
         var dbUser = getUser(defaultUser.getNickname());
 
