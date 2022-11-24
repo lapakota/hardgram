@@ -31,8 +31,8 @@ export const PostCard = observer(({ description, photos }: PostCardProps) => {
             <MoreVertIcon />
           </IconButton>
         }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
+        title={userInfo?.nickname}
+        subheader="24.10.2022"
       />
       <CardMedia component={'img'} height={450} image={photos ? photos[0] : ''} />
       <CardContent>
