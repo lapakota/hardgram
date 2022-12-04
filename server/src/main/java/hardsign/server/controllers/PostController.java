@@ -1,8 +1,6 @@
 package hardsign.server.controllers;
 
 import hardsign.server.common.mapper.Mapper;
-import hardsign.server.entities.UserEntity;
-import hardsign.server.entities.PostEntity;
 import hardsign.server.models.post.CreatePostModel;
 import hardsign.server.models.post.PostModel;
 import hardsign.server.models.post.UpdatePostModel;
@@ -12,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import java.util.Comparator;
+
 import java.util.List;
 
 @RestController
@@ -30,15 +28,15 @@ public class PostController {
     }
 
     @GetMapping(value = "/post/{postId}")
-    public ResponseEntity<PostModel> get(Long postId) {
+    public ResponseEntity<PostModel> get(@PathVariable Long postId) {
         return postService.getPost(postId)
                 .buildResponseEntity(mapper::mapToModel);
     }
 
-    @GetMapping(value = "/posts/{userName}")
-    public ResponseEntity<List<PostModel>> getPostsByNickname(String userName) {
-        var postEntityList = userService.getUser(userName).get().getPosts();
-        var postModels = postEntityList.stream().sorted((x,y)-> y.getCreateTime().compareTo(x.getCreateTime())).map(mapper::mapToModel).toList();
+    @GetMapping(value = "/posts/{nickname}")
+    public ResponseEntity<List<PostModel>> getPostsByNickname(@PathVariable String nickname) {
+        var postEntities = userService.getUser(nickname).get().getPosts();
+        var postModels = postEntities.stream().sorted((x, y)-> y.getCreateTime().compareTo(x.getCreateTime())).map(mapper::mapToModel).toList();
         return ResponseEntity.ok(postModels);
     }
 
@@ -55,7 +53,7 @@ public class PostController {
     }
 
     @DeleteMapping(path = "/post/{id}")
-    public ResponseEntity<String> delete(Long id) {
+    public ResponseEntity<String> delete(@PathVariable Long id) {
         return postService.deletePost(id)
                 .buildResponseEntity(x -> x);
     }

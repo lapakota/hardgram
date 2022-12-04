@@ -6,10 +6,7 @@ import hardsign.server.models.comment.CommentModel;
 import hardsign.server.models.comment.UpdateCommentModel;
 import hardsign.server.services.CommentService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class CommentsController {
@@ -34,7 +31,7 @@ public class CommentsController {
     }
 
     @DeleteMapping("comment/{commentId}")
-    public ResponseEntity<String> delete(Long commentId) {
+    public ResponseEntity<String> delete(@PathVariable Long commentId) {
         return commentService.delete(commentId)
                 .buildResponseEntity(x -> x);
     }

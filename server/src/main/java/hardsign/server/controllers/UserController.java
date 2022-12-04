@@ -8,8 +8,6 @@ import hardsign.server.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.inject.Inject;
-
 @RestController
 @CrossOrigin
 public class UserController {
@@ -17,7 +15,6 @@ public class UserController {
     private final UserService userService;
     private final Mapper mapper;
 
-    @Inject
     public UserController(CurrentUserService currentUserService, UserService userService, Mapper mapper) {
         this.currentUserService = currentUserService;
         this.userService = userService;
@@ -31,13 +28,13 @@ public class UserController {
     }
 
     @GetMapping(value = "/user/{userId}")
-    public ResponseEntity<UserModel> getById(Long userId) {
+    public ResponseEntity<UserModel> getById(@PathVariable Long userId) {
         return userService.getUser(userId)
                 .buildResponseEntity(mapper::mapToModel);
     }
 
     @GetMapping(value = "/user/{nickname}")
-    public ResponseEntity<UserModel> getByNickname(String nickname) {
+    public ResponseEntity<UserModel> getByNickname(@PathVariable String nickname) {
         return userService.getUser(nickname)
                 .buildResponseEntity(mapper::mapToModel);
     }
