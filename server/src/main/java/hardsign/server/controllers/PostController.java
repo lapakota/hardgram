@@ -28,6 +28,14 @@ public class PostController {
         this.mapper = mapper;
     }
 
+    @GetMapping(value = "posts/me")
+    public ResponseEntity<List<PostModel>> getPosts(){
+        var posts = postService.getPosts();
+        var postsModels = posts.stream().map(mapper::mapToModel).toList();
+        return ResponseEntity.ok(postsModels);
+
+    }
+
     @GetMapping(value = "/post/{postId}")
     public ResponseEntity<PostModel> get(Long postId) {
         var post = postService.getPost(postId);
