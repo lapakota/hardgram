@@ -9,16 +9,16 @@ public class PostModel {
     private final List<String> photos;
     private final Date createTime;
     private final String description;
-    private final Boolean isLike;
-    private final Number likesCount;
+    private final boolean isLiked;
+    private final int likesCount;
 
-    public PostModel(Long postId, Long userId, List<String> photos, Date createTime, String description, Boolean isLike, Number countLikes) {
+    public PostModel(Long postId, Long userId, List<String> photos, Date createTime, String description, boolean isLiked, int countLikes) {
         this.postId = postId;
         this.userId = userId;
         this.photos = photos;
         this.createTime = createTime;
         this.description = description;
-        this.isLike = isLike;
+        this.isLiked = isLiked;
         this.likesCount = countLikes;
     }
 
@@ -42,9 +42,11 @@ public class PostModel {
         return description;
     }
 
-    public Boolean getIsLike(){ return isLike; }
-
     public Number getLikesCount() {
         return likesCount;
+    }
+
+    public boolean isLiked() {
+        return isLiked;
     }
 }

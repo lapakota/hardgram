@@ -3,14 +3,11 @@ package hardsign.server.entities;
 import javax.persistence.*;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "comments")
 public class CommentEntity {
-    public CommentEntity() {
-
-    }
+    public CommentEntity() { }
 
     public CommentEntity(UserEntity user, PostEntity post, String text, Date createTime) {
         this.id = 0L;
@@ -37,9 +34,6 @@ public class CommentEntity {
 
     @Column(name = "text", nullable = false)
     private String text;
-
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<CommentEntity> comments;
 
     public UserEntity getUser() {
         return user;
@@ -75,13 +69,5 @@ public class CommentEntity {
 
     public Long getId() {
         return id;
-    }
-
-    public List<CommentEntity> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<CommentEntity> comments) {
-        this.comments = comments;
     }
 }

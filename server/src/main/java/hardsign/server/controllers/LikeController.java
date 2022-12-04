@@ -3,6 +3,7 @@ package hardsign.server.controllers;
 import hardsign.server.services.LikeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,25 +19,15 @@ public class LikeController {
         this.likeService = likeService;
     }
 
-    @PostMapping(path = "/like/add/{postId}")
-    public ResponseEntity Add(Long postId) {
-        try {
-           likeService.AddLike(postId);
-           return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
+    @PostMapping(path = "/like/{postId}")
+    public ResponseEntity<String> add(Long postId) {
+        return likeService.addLike(postId)
+                .buildResponseEntity(x -> x);
     }
 
-    @PostMapping(path = "/like/delete/{postId}")
-    public ResponseEntity Delete(Long postId) {
-        try {
-            likeService.DeleteLike(postId);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
+    @DeleteMapping(path = "/like/{postId}")
+    public ResponseEntity<String> remove(Long postId) {
+        return likeService.removeLike(postId)
+                .buildResponseEntity(x -> x);
     }
-
-
 }

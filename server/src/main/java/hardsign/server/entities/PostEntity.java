@@ -2,6 +2,7 @@ package hardsign.server.entities;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +17,8 @@ public class PostEntity {
         this.photos = photos;
         this.createTime = createTime;
         this.description = description;
+        this.comments = new ArrayList<>();
+        this.likes = new ArrayList<>();
     }
 
     @Id
@@ -35,6 +38,12 @@ public class PostEntity {
 
     @Column(name = "description")
     private String description;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<CommentEntity> comments;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<LikeEntity> likes;
 
     public Long getId() {
         return id;
@@ -66,5 +75,21 @@ public class PostEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<LikeEntity> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<LikeEntity> likes) {
+        this.likes = likes;
+    }
+
+    public List<CommentEntity> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentEntity> comments) {
+        this.comments = comments;
     }
 }

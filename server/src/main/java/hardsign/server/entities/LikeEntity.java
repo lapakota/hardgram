@@ -9,19 +9,20 @@ public class LikeEntity {
     public LikeEntity() { }
 
     public LikeEntity(UserEntity user, PostEntity post) {
+        this.id = 0L;
         this.user = user;
         this.post = post;
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
-    @ManyToOne(targetEntity = UserEntity.class)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    @ManyToOne(targetEntity = PostEntity.class)
+    @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)
     private PostEntity post;
 
@@ -42,6 +43,6 @@ public class LikeEntity {
     }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 }
