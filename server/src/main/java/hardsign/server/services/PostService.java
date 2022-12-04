@@ -32,19 +32,33 @@ public class PostService {
     }
 
     public Result<PostEntity> updatePost(UpdatePostModel updatePostModel) {
-        var post = postRepository.findById(updatePostModel.getPostId()).get();
+        return Result.fromOptional(postRepository.findById(updatePostModel.getPostId()), Status.NotFound)
+                .then(post -> update(post, updatePostModel))
+                .then(postRepository::save);
+    }
+
+    public Result<String> deletePost(Long postId) {
+        return Result.of(() -> {
+            postRepository.deleteById(postId);
+            return "Success";
+        }, Status.NotFound);
+    }
+
+    public Result<PostEntity> createPost(CreatePostModel createPostModel) {
+        return currentUserService.getCurrentUser()
+                .then(user -> createPostEntity(user, createPostModel))
+                .then(postRepository::save);
+    }
+
+    private PostEntity update(PostEntity post, UpdatePostModel updatePostModel) {
         post.setDescription(updatePostModel.getDescription());
-        post.setPhotos(updatePostModel.getPhotos().stream().map(helper::encodeStringToBase64).toList());
-        return Result.of(postRepository.save(post));
+        var photos = updatePostModel.getPhotos().stream().map(helper::encodeStringToBase64).toList();
+        post.setPhotos(photos);
+        return post;
     }
 
-    public void deletePost(Long postId) {
-        postRepository.deleteById(postId);
-    }
-
-    public PostEntity createPost(CreatePostModel createPostModel) {
-        var user = currentUserService.getCurrentUser().get();
-        var post = new PostEntity(user, createPostModel.getPhotos().stream().map(helper::encodeStringToBase64).toList(), new Date(), createPostModel.getDescription());
-        return postRepository.save(post);
+    private PostEntity createPostEntity(UserEntity user, CreatePostModel createPostModel) {
+        var photos = createPostModel.getPhotos().stream().map(helper::encodeStringToBase64).toList();
+        return new PostEntity(user, photos, new Date(), createPostModel.getDescription());
     }
 }

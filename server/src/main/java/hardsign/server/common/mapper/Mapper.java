@@ -21,7 +21,8 @@ public class Mapper {
     }
 
     public PostModel mapToModel(PostEntity post) {
-        return new PostModel(post.getId(), post.getUser().getId(), post.getPhotos().stream().map(helper::decodeBase64ToString).toList(), post.getCreateTime(), post.getDescription(), getUserLike(post), getCountLikes(post.getId()));
+        var photos = post.getPhotos().stream().map(helper::decodeBase64ToString).toList();
+        return new PostModel(post.getId(), post.getUser().getId(), photos, post.getCreateTime(), post.getDescription(), getUserLike(post), getCountLikes(post.getId()));
     }
 
     public UserModel mapToModel(UserEntity user) {
@@ -44,3 +45,4 @@ public class Mapper {
     private Long getCountLikes(Long postId) {
         return likeService.getCountLikes(postId).longValue();
     }
+}
