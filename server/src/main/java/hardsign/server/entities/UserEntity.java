@@ -16,6 +16,7 @@ public class UserEntity {
         this.avatar = avatar;
         this.password = password;
         this.posts = new ArrayList<>();
+        this.subscriptions = new ArrayList<>();
     }
 
     @Id
@@ -36,6 +37,9 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<PostEntity> posts;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<SubscriptionEntity> subscriptions;
 
     public Long getId() {
         return id;
@@ -79,5 +83,12 @@ public class UserEntity {
 
     public void setPosts(List<PostEntity> posts) {
         this.posts = posts;
+    }
+
+    public List<SubscriptionEntity> getSubscriptions() {
+        return subscriptions;
+    }
+    public void setSubscriptions(List<SubscriptionEntity> subscriptions){
+        this.subscriptions = subscriptions;
     }
 }

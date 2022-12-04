@@ -19,15 +19,19 @@ public class Mapper {
     }
 
     public PostModel mapToModel(PostEntity post) {
-        return new PostModel(post.getId(), post.getUser().getId(), post.getPhotos().stream().map(helper::decodeBase64ToString).toList(), post.getCreateTime(), post.getDescription(), getUserLike(post), getCountLikes(post.getId()));
+        return new PostModel(post.getId(), post.getUser().getId(),
+                post.getPhotos().stream().map(helper::decodeBase64ToString).toList(),
+                post.getCreateTime(), post.getDescription(), isUserLike(post),
+                getCountLikes(post.getId()));
     }
 
     public UserModel mapToModel(UserEntity user) {
         var posts = user.getPosts().stream().map(this::mapToModel).toList();
-        return new UserModel(user.getId(), user.getNickname(), user.getFullName(), helper.decodeBase64ToString(user.getAvatar()), posts);
+        return new UserModel(user.getId(), user.getNickname(),
+                user.getFullName(), helper.decodeBase64ToString(user.getAvatar()), posts);
     }
 
-    private Boolean getUserLike(PostEntity post) {
+    private Boolean isUserLike(PostEntity post) {
         return likeService.IsLikedPostByUserFuckingMe(post.getUser().getId(), post.getId());
     }
 
