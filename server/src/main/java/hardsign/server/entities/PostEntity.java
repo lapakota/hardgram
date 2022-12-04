@@ -10,7 +10,7 @@ import java.util.List;
 public class PostEntity {
     public PostEntity() { }
 
-    public PostEntity(UserEntity user, List<String> photos, Date createTime, String description) {
+    public PostEntity(UserEntity user, List<byte[]> photos, Date createTime, String description) {
         this.id = 0L;
         this.user = user;
         this.photos = photos;
@@ -28,7 +28,7 @@ public class PostEntity {
 
     @Column(name = "photos", nullable = false)
     @ElementCollection
-    private List<String> photos;
+    private List<byte[]> photos;
 
     @Column(name = "create_time", nullable = false)
     private Date createTime;
@@ -44,11 +44,11 @@ public class PostEntity {
         return user;
     }
 
-    public List<String> getPhotos() {
+    public List<byte[]> getPhotos() {
         return photos;
     }
 
-    public void setPhotos(List<String> photos) {
+    public void setPhotos(List<byte[]> photos) {
         this.photos = photos;
     }
 

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 
 @RestController
+@CrossOrigin
 public class UserController {
     private final CurrentUserService  currentUserService;
     private final UserService userService;

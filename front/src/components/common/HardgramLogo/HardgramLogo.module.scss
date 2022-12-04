@@ -1,7 +1,9 @@
+@import "src/styles/variables";
+
 .logo {
   display: flex;
   justify-content: center;
-  padding: 8px;
+  padding: $base-size;
   font-size: 60px;
   font-family: 'Billabong', sans-serif;
   user-select: none;

@@ -1,0 +1,26 @@
+@import "src/styles/variables";
+
+.form {
+  width: 350px;
+  padding: $base-size * 2 $base-size * 6 $base-size * 4;
+  background-color: #FFFFFF;
+  box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+
+  .main {
+    display: flex;
+    flex-direction: column;
+    gap: $base-size * 4;
+
+    .fields {
+      display: flex;
+      flex-direction: column;
+      gap: $base-size * 2;
+    }
+  }
+
+  .additional {
+    margin-top: $base-size * 4;
+    display: flex;
+    justify-content: center;
+  }
+}
