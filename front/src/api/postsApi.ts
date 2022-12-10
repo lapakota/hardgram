@@ -21,4 +21,4 @@ export const getUserPosts = async (nickname: string, token: string): Promise<Pos
   axios.get(`${BASE_ROUTE}/posts/${nickname}`, { ...AxiosAuthConfig(token) }).then((x) => x.data);
 
 export const deletePost = async (postId: number, token: string): Promise<Response> =>
-  axios.post(`${BASE_ROUTE}/post/delete/${postId}`, {}, { ...AxiosAuthConfig(token) });
+  axios.delete(`${BASE_ROUTE}/post/delete/${postId}`, { ...AxiosAuthConfig(token) });

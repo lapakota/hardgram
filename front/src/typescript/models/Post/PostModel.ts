@@ -1,9 +1,9 @@
 export interface PostModel {
   postId: number;
-  userId: number;
+  nickname: string;
   photos: string[];
   description: string;
-  isLike: boolean;
+  liked: boolean;
   likesCount: number;
   createTime: string;
 }

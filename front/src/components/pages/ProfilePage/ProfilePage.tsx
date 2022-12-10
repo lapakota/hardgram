@@ -11,7 +11,7 @@ import { getUserPosts } from '../../../api/postsApi';
 import { Avatar, Button, IconButton, Stack } from '@mui/material';
 import { Settings as SettingsIcon } from '@mui/icons-material';
 import { useModal } from '../../../hooks/useModal';
-import { AddPostModal } from './PostActionModal/AddPostModal';
+import { AddPostModal } from './AddPostModal/AddPostModal';
 import { Layout } from '../../common/Layout/Layout';
 import { PostCard } from '../../common/PostCard/PostCard';
 
@@ -28,7 +28,7 @@ export const ProfilePage = observer((): React.ReactElement => {
   const isOwnPage = userInfoStore.userInfo?.nickname === nickname;
 
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchProfileInfo = async () => {
       if (!nickname || !userInfoStore.token) return;
 
       const info = await getUserInfo(nickname, userInfoStore.token);
@@ -36,7 +36,7 @@ export const ProfilePage = observer((): React.ReactElement => {
       setUserInfo(info);
       setPosts(userPosts);
     };
-    fetchPosts();
+    fetchProfileInfo();
   }, [nickname]);
 
   return (
@@ -77,12 +77,12 @@ export const ProfilePage = observer((): React.ReactElement => {
           </Stack>
           <div className={styles.posts}>
             <Stack direction={'column'} spacing={2}>
-              {posts?.map((x) => (
-                <PostCard key={x.postId} photos={x.photos} description={x.description} />
+              {posts?.map((post) => (
+                <PostCard key={post.postId} post={post} />
               ))}
             </Stack>
           </div>
-          <AddPostModal isOpen={isModalOpen} handleClose={handleModalClose} />
+          <AddPostModal isOpen={isModalOpen} handleClose={handleModalClose} setPosts={setPosts} />
         </div>
       ) : (
         <Spinner />

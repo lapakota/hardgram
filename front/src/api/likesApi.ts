@@ -5,7 +5,7 @@ import { PostModel } from '../typescript/models/Post/PostModel';
 export const addLike = async (postId: number, token: string): Promise<PostModel> =>
   axios
     .post(
-      `${BASE_ROUTE}/like/add/${postId}`,
+      `${BASE_ROUTE}/like/${postId}`,
       {},
       {
         ...AxiosAuthConfig(token)
@@ -15,11 +15,7 @@ export const addLike = async (postId: number, token: string): Promise<PostModel>
 
 export const deleteLike = async (postId: number, token: string): Promise<PostModel> =>
   axios
-    .post(
-      `${BASE_ROUTE}/like/delete/${postId}`,
-      {},
-      {
-        ...AxiosAuthConfig(token)
-      }
-    )
+    .delete(`${BASE_ROUTE}/like/${postId}`, {
+      ...AxiosAuthConfig(token)
+    })
     .then((x) => x.data);
