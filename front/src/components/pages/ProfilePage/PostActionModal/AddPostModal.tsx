@@ -10,7 +10,7 @@ import { DESCRIPTION_RULES } from '../../../../utils/validation/validationRules'
 import { createPost } from '../../../../api/postsApi';
 import { observer } from 'mobx-react-lite';
 import { useStores } from '../../../../hooks/useStores';
-import { PostModelCreate } from '../../../../typescript/models/Post/PostModelCreate';
+import { CreatePostModel } from '../../../../typescript/models/Post/CreatePostModel';
 import { useState } from 'react';
 import Toast from '../../../common/Toast/Toast';
 import Carousel from 'react-material-ui-carousel';
@@ -60,7 +60,7 @@ export const AddPostModal = observer(({ isOpen, handleClose, activePost }: AddPo
 
   const photos = watch('photos');
 
-  const onAddPost = async (values: PostModelCreate) => {
+  const onAddPost = async (values: CreatePostModel) => {
     if (!token || (values.photos?.length === 0 && !values.description)) return;
 
     try {

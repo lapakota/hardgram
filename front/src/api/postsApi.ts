@@ -1,13 +1,17 @@
-import { PostModelCreate } from '../typescript/models/Post/PostModelCreate';
+import { CreatePostModel } from '../typescript/models/Post/CreatePostModel';
 import { AxiosAuthConfig, BASE_ROUTE } from './utils';
 import axios from 'axios';
 import { PostModel } from '../typescript/models/Post/PostModel';
+import { UpdatePostModel } from '../typescript/models/Post/UpdatePostModel';
 
-export const createPost = async (post: PostModelCreate, token: string): Promise<Response> =>
+export const createPost = async (post: CreatePostModel, token: string): Promise<Response> =>
   axios.post(`${BASE_ROUTE}/post/create`, post, { ...AxiosAuthConfig(token) });
 
-export const getPost = async (postId: string, token: string): Promise<PostModel> => {
-  const params = new URLSearchParams([['postId', postId]]);
+export const updatePost = async (post: UpdatePostModel, token: string): Promise<Response> =>
+  axios.put(`${BASE_ROUTE}/post/update`, post, { ...AxiosAuthConfig(token) });
+
+export const getPost = async (postId: number, token: string): Promise<PostModel> => {
+  const params = new URLSearchParams([['postId', postId.toString()]]);
   return axios
     .get(`${BASE_ROUTE}/post/${postId}`, {
       ...AxiosAuthConfig(token),
@@ -23,7 +27,7 @@ export const getUserPosts = async (nickname: string, token: string): Promise<Pos
     .then((x) => x.data);
 };
 
-export const deletePost = async (postId: string, token: string): Promise<Response> => {
-  const params = new URLSearchParams([['id', postId]]);
+export const deletePost = async (postId: number, token: string): Promise<Response> => {
+  const params = new URLSearchParams([['id', postId.toString()]]);
   return axios.post(`${BASE_ROUTE}/post/delete/${postId}`, params, { ...AxiosAuthConfig(token) });
 };
