@@ -22,31 +22,33 @@ public class SubscriptionsService {
         this.mapper = mapper;
     }
 
-    public List<UserModel> getFollowing(Long userId) {
+    public List<UserModel> getFollowing(String nickname) {
+        var userId =  userRepository.findByNickname(nickname).getId();
         var subs = subscriptionsRepository.findByUserId(userId);
         return subs.stream().map(SubscriptionEntity::getFollowing).map(mapper::mapToModel).toList();
 
     }
 
-    public List<UserModel> getFollowers(Long userId) {
+    public List<UserModel> getFollowers(String nickname) {
+        var userId =  userRepository.findByNickname(nickname).getId();
         var subs = subscriptionsRepository.findByFollowingId(userId);
         return subs.stream().map(SubscriptionEntity::getUser).map(mapper::mapToModel).toList();
     }
 
-    public void addFollow(Long followingId) {
-        var subs = subscriptionsRepository.findByUserId(currentUserService.getCurrentUser().get().getId());
-        var existSub = subs.stream().filter(x -> x.getFollowing().getId().equals(followingId)).toList();
-        if (existSub.size() == 0) {
-            var user = currentUserService.getCurrentUser().get();
-            var followingUser = userRepository.findById(followingId).get();
+    public void addFollow(String nickname) {
+        var user = currentUserService.getCurrentUser().get();
+        var subs = subscriptionsRepository.findByUserId(user.getId());
+        var existSub = subs.stream().anyMatch(x -> x.getFollowing().getNickname().equals(nickname));
+        if (!existSub) {
+            var followingUser = userRepository.findByNickname(nickname);
             var sub = new SubscriptionEntity(user, followingUser);
             subscriptionsRepository.save(sub);
         }
     }
 
-    public void deleteFollow(Long followingId) {
+    public void deleteFollow(String nickname) {
         var subs = subscriptionsRepository.findByUserId(currentUserService.getCurrentUser().get().getId());
-        var deletingUser = subs.stream().filter(x -> x.getFollowing().getId().equals(followingId)).findFirst();
+        var deletingUser = subs.stream().filter(x -> x.getFollowing().getNickname().equals(nickname)).findFirst();
         if (!deletingUser.isEmpty()) {
             subscriptionsRepository.delete(deletingUser.get());
         }

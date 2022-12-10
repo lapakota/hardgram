@@ -12,9 +12,7 @@ import hardsign.server.utils.Helper;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 @Component
@@ -35,9 +33,7 @@ public class PostService {
     public List<PostEntity> getPosts(){
         var subs = subscriptionsRepository.findByUserId(currentUserService.getCurrentUser().get().getId());
         var subPosts = subs.stream().map(x -> x.getFollowing().getPosts()).toList();
-        var result = new ArrayList<PostEntity>();
-        subPosts.forEach(result::addAll);
-        return result;
+        return subPosts.stream().flatMap(Collection::stream).toList();
     }
 
 

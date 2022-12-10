@@ -18,30 +18,30 @@ public class SubscriptionsController {
         this.subscriptionsService = subscriptionsService;
     }
 
-    @GetMapping("/following/{userId}")
-    public ResponseEntity<List<UserModel>> getFollowing(Long userId){
+    @GetMapping("/following/{nickname}")
+    public ResponseEntity<List<UserModel>> getFollowing(@PathVariable String nickname){
       try {
-          var users = subscriptionsService.getFollowing(userId);
+          var users = subscriptionsService.getFollowing(nickname);
           return ResponseEntity.ok(users);
       } catch (Exception e){
           return ResponseEntity.internalServerError().build();
       }
     }
 
-    @GetMapping("/followers/{userId}")
-    public ResponseEntity<List<UserModel>> getFollowers(Long userId){
+    @GetMapping("/followers/{nickname}")
+    public ResponseEntity<List<UserModel>> getFollowers(@PathVariable String nickname){
        try {
-            var users = subscriptionsService.getFollowers(userId);
+            var users = subscriptionsService.getFollowers(nickname);
             return ResponseEntity.ok(users);
        } catch (Exception e){
            return ResponseEntity.internalServerError().build();
         }
     }
 
-    @PostMapping(path = "/following/delete/{userId}")
-    public ResponseEntity unFollow(Long userId) {
+    @PostMapping(path = "/unfollow/{nickname}")
+    public ResponseEntity unFollow(@PathVariable String nickname) {
         try {
-            subscriptionsService.deleteFollow(userId);
+            subscriptionsService.deleteFollow(nickname);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return  ResponseEntity.internalServerError().build();
@@ -49,10 +49,10 @@ public class SubscriptionsController {
 
     }
 
-    @PostMapping(path = "/following/add/{userId}")
-    public ResponseEntity follow(Long userId) {
+    @PostMapping(path = "/follow/{nickname}")
+    public ResponseEntity follow(@PathVariable String nickname) {
         try {
-            subscriptionsService.addFollow(userId);
+            subscriptionsService.addFollow(nickname);
             return ResponseEntity.ok().build();
         } catch (Exception e){
             return ResponseEntity.internalServerError().build();
