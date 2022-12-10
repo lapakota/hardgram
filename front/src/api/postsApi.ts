@@ -10,24 +10,15 @@ export const createPost = async (post: CreatePostModel, token: string): Promise<
 export const updatePost = async (post: UpdatePostModel, token: string): Promise<Response> =>
   axios.put(`${BASE_ROUTE}/post/update`, post, { ...AxiosAuthConfig(token) });
 
-export const getPost = async (postId: number, token: string): Promise<PostModel> => {
-  const params = new URLSearchParams([['postId', postId.toString()]]);
-  return axios
+export const getPost = async (postId: number, token: string): Promise<PostModel> =>
+  axios
     .get(`${BASE_ROUTE}/post/${postId}`, {
-      ...AxiosAuthConfig(token),
-      params
+      ...AxiosAuthConfig(token)
     })
     .then((x) => x.data);
-};
 
-export const getUserPosts = async (nickname: string, token: string): Promise<PostModel[]> => {
-  const params = new URLSearchParams([['userName', nickname]]);
-  return axios
-    .get(`${BASE_ROUTE}/posts/${nickname}`, { ...AxiosAuthConfig(token), params })
-    .then((x) => x.data);
-};
+export const getUserPosts = async (nickname: string, token: string): Promise<PostModel[]> =>
+  axios.get(`${BASE_ROUTE}/posts/${nickname}`, { ...AxiosAuthConfig(token) }).then((x) => x.data);
 
-export const deletePost = async (postId: number, token: string): Promise<Response> => {
-  const params = new URLSearchParams([['id', postId.toString()]]);
-  return axios.post(`${BASE_ROUTE}/post/delete/${postId}`, params, { ...AxiosAuthConfig(token) });
-};
+export const deletePost = async (postId: number, token: string): Promise<Response> =>
+  axios.post(`${BASE_ROUTE}/post/delete/${postId}`, {}, { ...AxiosAuthConfig(token) });
