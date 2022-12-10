@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
@@ -38,6 +39,19 @@ public class Result<T> {
         } catch (Exception e) {
             return Result.fault(status);
         }
+    }
+
+    public Result<T> when(Supplier<Boolean> predicate, Status status) {
+        if (predicate.get())
+            return this;
+        return Result.fault(status);
+    }
+
+    public Result<T> when(Function<T, Boolean> predicate, Status status) {
+        if (isSuccess() && predicate.apply(get())) {
+            return this;
+        }
+        return Result.fault(status);
     }
 
     public static <T> Result<T> of(Supplier<T> function) {

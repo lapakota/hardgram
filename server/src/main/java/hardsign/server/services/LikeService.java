@@ -3,6 +3,8 @@ package hardsign.server.services;
 import hardsign.server.common.Result;
 import hardsign.server.common.Status;
 import hardsign.server.entities.LikeEntity;
+import hardsign.server.entities.PostEntity;
+import hardsign.server.entities.UserEntity;
 import hardsign.server.repositories.LikeRepository;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +30,7 @@ public class LikeService {
             return Result.fault(Status.NotFound);
 
         return currentUserService.getCurrentUser()
+                .when(user -> !isLikeExists(user, postResult.get()), Status.IncorrectArguments)
                 .then(user -> new LikeEntity(user, postResult.get()))
                 .then(likeRepository::save, Status.ServerError)
                 .then(x -> "success");
@@ -41,5 +44,9 @@ public class LikeService {
                     likeRepository.delete(like);
                     return "success";
                 }, Status.ServerError);
+    }
+
+    private boolean isLikeExists(UserEntity user, PostEntity post) {
+        return likeRepository.findLike(user.getId(), post.getId()).isPresent();
     }
 }
