@@ -25,7 +25,7 @@ public class Mapper {
 
     public PostModel mapToModel(PostEntity post) {
         var photos = post.getPhotos().stream().map(helper::decodeBase64ToString).toList();
-        return new PostModel(post.getId(), post.getUser().getId(), photos, post.getCreateTime(), post.getDescription(),
+        return new PostModel(post.getId(), post.getUser().getNickname(), photos, post.getCreateTime(), post.getDescription(),
                 isPostLikedByCurrentUser(post), getLikesCount(post));
     }
 
@@ -37,7 +37,7 @@ public class Mapper {
     public CommentModel mapToModel(CommentEntity comment) {
         return new CommentModel(comment.getId(),
                 comment.getPost().getId(),
-                comment.getUser().getId(),
+                comment.getUser().getNickname(),
                 comment.getText(),
                 comment.getCreateTime());
     }

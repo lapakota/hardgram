@@ -5,16 +5,16 @@ import java.util.Date;
 
 public class PostModel {
     private final Long postId;
-    private final Long userId;
+    private final String nickname;
     private final List<String> photos;
     private final Date createTime;
     private final String description;
     private final boolean isLiked;
     private final int likesCount;
 
-    public PostModel(Long postId, Long userId, List<String> photos, Date createTime, String description, boolean isLiked, int countLikes) {
+    public PostModel(Long postId, String nickname, List<String> photos, Date createTime, String description, boolean isLiked, int countLikes) {
         this.postId = postId;
-        this.userId = userId;
+        this.nickname = nickname;
         this.photos = photos;
         this.createTime = createTime;
         this.description = description;
@@ -26,8 +26,8 @@ public class PostModel {
         return postId;
     }
 
-    public Long getUserId() {
-        return userId;
+    public String getNickname() {
+        return nickname;
     }
 
     public List<String> getPhotos() {

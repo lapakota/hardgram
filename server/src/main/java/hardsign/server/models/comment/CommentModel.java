@@ -5,14 +5,14 @@ import java.util.Date;
 public class CommentModel {
     private Long commentId;
     private Long postId;
-    private Long userId;
+    private String nickname;
     private String text;
     private Date createTime;
 
-    public CommentModel(Long commentId, Long postId, Long userId, String text, Date createTime) {
+    public CommentModel(Long commentId, Long postId, String nickname, String text, Date createTime) {
         this.commentId = commentId;
         this.postId = postId;
-        this.userId = userId;
+        this.nickname = nickname;
         this.text = text;
         this.createTime = createTime;
     }
@@ -33,12 +33,12 @@ public class CommentModel {
         this.postId = postId;
     }
 
-    public Long getUserId() {
-        return userId;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getText() {

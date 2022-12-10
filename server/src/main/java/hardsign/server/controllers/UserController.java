@@ -27,12 +27,6 @@ public class UserController {
                 .buildResponseEntity(mapper::mapToModel);
     }
 
-    @GetMapping(value = "/user/{userId}")
-    public ResponseEntity<UserModel> getById(@PathVariable Long userId) {
-        return userService.getUser(userId)
-                .buildResponseEntity(mapper::mapToModel);
-    }
-
     @GetMapping(value = "/user/{nickname}")
     public ResponseEntity<UserModel> getByNickname(@PathVariable String nickname) {
         return userService.getUser(nickname)
