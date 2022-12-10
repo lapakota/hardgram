@@ -1,5 +1,7 @@
 package hardsign.server.services;
 
+import hardsign.server.common.Result;
+import hardsign.server.common.Status;
 import hardsign.server.entities.UserEntity;
 import hardsign.server.models.user.UserRegistrationModel;
 import hardsign.server.models.user.UserUpdateModel;
@@ -13,7 +15,6 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Optional;
 
 
 @Component
@@ -40,14 +41,18 @@ public class UserService implements UserDetailsService {
         return new User(dbUser.getNickname(), dbUser.getPassword(), new ArrayList<>());
     }
 
-    public Optional<UserEntity> getUser(String nickname) {
-        return Optional.ofNullable(userRepository.findByNickname(nickname));
+    public Result<UserEntity> getUser(Long userId) {
+        return Result.fromOptional(userRepository.findById(userId), Status.NotFound);
     }
 
-    public Optional<UserEntity> updateUser(UserUpdateModel updateUserModel) {
+    public Result<UserEntity> getUser(String nickname) {
+        return Result.of(userRepository.findByNickname(nickname), Status.NotFound);
+    }
+
+    public Result<UserEntity> updateUser(UserUpdateModel updateUserModel) {
         return currentUserService.getCurrentUser()
-                .map(user -> update(user, updateUserModel))
-                .map(userRepository::save);
+                .then(user -> update(user, updateUserModel))
+                .then(userRepository::save);
     }
 
     private UserEntity update(UserEntity user, UserUpdateModel updateUserModel) {
@@ -56,16 +61,17 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public UserEntity addUser(UserRegistrationModel userRegistrationModel) throws Exception {
-        var dbUser = userRepository.findByNickname(userRegistrationModel.getNickname());
+    public Result<UserEntity> addUser(UserRegistrationModel userRegistrationModel){
+        var nickname = userRegistrationModel.getNickname();
+        var findByNickname = userRepository.findByNickname(nickname);
 
-        if (dbUser != null) {
-            throw new Exception("already exist");
+        if (findByNickname != null) {
+            return Result.fault(Status.IncorrectArguments);
         }
 
-        var user = map(userRegistrationModel);
-
-        return userRepository.save(user);
+        return Result
+                .of(() -> map(userRegistrationModel))
+                .then(userRepository::save);
     }
 
     private UserEntity map(UserRegistrationModel model) {
@@ -77,7 +83,7 @@ public class UserService implements UserDetailsService {
         var defaultUser = getDefaultUser();
         var dbUser = getUser(defaultUser.getNickname());
 
-        if (dbUser.isEmpty())
+        if (dbUser.isFailure())
             userRepository.save(defaultUser);
     }
 

@@ -1,44 +1,52 @@
 package hardsign.server.services;
 
+import hardsign.server.common.Result;
+import hardsign.server.common.Status;
 import hardsign.server.entities.LikeEntity;
+import hardsign.server.entities.PostEntity;
+import hardsign.server.entities.UserEntity;
 import hardsign.server.repositories.LikeRepository;
-import hardsign.server.repositories.PostRepository;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
+import java.util.Optional;
 
 @Component
 public class LikeService {
     private final LikeRepository likeRepository;
     private final CurrentUserService currentUserService;
-    private final PostRepository postRepository;
+    private final PostService postService;
 
     @Inject
-    public LikeService(LikeRepository likeRepository, CurrentUserService currentUserService, PostRepository postRepository) {
+    public LikeService(LikeRepository likeRepository, CurrentUserService currentUserService, PostService postService) {
         this.likeRepository = likeRepository;
         this.currentUserService = currentUserService;
-        this.postRepository = postRepository;
+        this.postService = postService;
     }
 
-    public void AddLike(Long postId){
-        var user = currentUserService.getCurrentUser().get();
-        var post = postRepository.findById(postId).get();
-        var like = new LikeEntity(user, post);
-        likeRepository.save(like);
+    public Result<String> addLike(Long postId) {
+        var postResult = postService.getPost(postId);
+        if (postResult.isFailure())
+            return Result.fault(Status.NotFound);
+
+        return currentUserService.getCurrentUser()
+                .when(user -> !isLikeExists(user, postResult.get()), Status.IncorrectArguments)
+                .then(user -> new LikeEntity(user, postResult.get()))
+                .then(likeRepository::save, Status.ServerError)
+                .then(x -> "success");
     }
 
-    public void DeleteLike(Long postId){
-        var userId = currentUserService.getCurrentUser().get().getId();
-        var like = likeRepository.findLike(userId, postId).get();
-        likeRepository.deleteById(like.getId());
+    public Result<String> removeLike(Long postId) {
+        return currentUserService.getCurrentUser()
+                .then(user -> likeRepository.findLike(user.getId(), postId), Status.NotFound)
+                .then(Optional::get)
+                .then(like -> {
+                    likeRepository.delete(like);
+                    return "success";
+                }, Status.ServerError);
     }
 
-    public Boolean IsLikedPostByUserFuckingMe(Long userId, Long postId){
-        return !likeRepository.findLike(userId, postId).isEmpty();
+    private boolean isLikeExists(UserEntity user, PostEntity post) {
+        return likeRepository.findLike(user.getId(), post.getId()).isPresent();
     }
-
-    public Number getCountLikes(Long postId){
-        return likeRepository.findLikes(postId).size();
-    }
-
 }

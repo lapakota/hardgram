@@ -8,8 +8,6 @@ import hardsign.server.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.inject.Inject;
-
 @RestController
 @CrossOrigin
 public class UserController {
@@ -17,7 +15,6 @@ public class UserController {
     private final UserService userService;
     private final Mapper mapper;
 
-    @Inject
     public UserController(CurrentUserService currentUserService, UserService userService, Mapper mapper) {
         this.currentUserService = currentUserService;
         this.userService = userService;
@@ -27,24 +24,24 @@ public class UserController {
     @GetMapping(value = "/me")
     public ResponseEntity<UserModel> me() {
         return currentUserService.getCurrentUser()
-                .map(mapper::mapToModel)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .buildResponseEntity(mapper::mapToModel);
+    }
+
+    @GetMapping(value = "/user/{userId}")
+    public ResponseEntity<UserModel> getById(@PathVariable Long userId) {
+        return userService.getUser(userId)
+                .buildResponseEntity(mapper::mapToModel);
     }
 
     @GetMapping(value = "/user/{nickname}")
-    public ResponseEntity<UserModel> getByNickname(String nickname) {
+    public ResponseEntity<UserModel> getByNickname(@PathVariable String nickname) {
         return userService.getUser(nickname)
-                .map(mapper::mapToModel)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .buildResponseEntity(mapper::mapToModel);
     }
 
-    @PostMapping(value = "/update")
+    @PostMapping(value = "/user/update")
     public ResponseEntity<UserModel> update(@RequestBody UserUpdateModel userUpdateModel) {
         return userService.updateUser(userUpdateModel)
-                .map(mapper::mapToModel)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.badRequest().build());
+                .buildResponseEntity(mapper::mapToModel);
     }
 }

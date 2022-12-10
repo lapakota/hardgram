@@ -1,7 +1,6 @@
 package hardsign.server.controllers;
 
 import hardsign.server.common.mapper.Mapper;
-import hardsign.server.entities.PostEntity;
 import hardsign.server.models.post.CreatePostModel;
 import hardsign.server.models.post.PostModel;
 import hardsign.server.models.post.UpdatePostModel;
@@ -11,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import java.util.Comparator;
+
 import java.util.List;
 
 @RestController
@@ -37,50 +36,33 @@ public class PostController {
     }
 
     @GetMapping(value = "/post/{postId}")
-    public ResponseEntity<PostModel> get(Long postId) {
-        var post = postService.getPost(postId);
-        var postModel = mapper.mapToModel(post);
-        return ResponseEntity.ok(postModel);
+    public ResponseEntity<PostModel> get(@PathVariable Long postId) {
+        return postService.getPost(postId)
+                .buildResponseEntity(mapper::mapToModel);
     }
 
-    @GetMapping(value = "/posts/{userName}")
-    public ResponseEntity<List<PostModel>> getPostsByNickname(String userName) {
-        var postEntityList = userService.getUser(userName).get().getPosts();
-        var postModels = postEntityList.stream().sorted((x,y)-> y.getCreateTime().compareTo(x.getCreateTime())).map(mapper::mapToModel).toList();
+    @GetMapping(value = "/posts/{nickname}")
+    public ResponseEntity<List<PostModel>> getPostsByNickname(@PathVariable String nickname) {
+        var postEntities = userService.getUser(nickname).get().getPosts();
+        var postModels = postEntities.stream().sorted((x, y)-> y.getCreateTime().compareTo(x.getCreateTime())).map(mapper::mapToModel).toList();
         return ResponseEntity.ok(postModels);
     }
 
     @PostMapping(path = "/post/create")
     public ResponseEntity<PostModel> create(@RequestBody CreatePostModel createPostModel) {
-        try {
-            var post = postService.createPost(createPostModel);
-            var postModel = mapper.mapToModel(post);
-            return ResponseEntity.ok(postModel);
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
+        return postService.createPost(createPostModel)
+                .buildResponseEntity(mapper::mapToModel);
     }
 
     @PostMapping(path = "/post/update")
-    public ResponseEntity<PostModel> update(@RequestBody UpdatePostModel post) {
-        try {
-            var updatedPost = postService.updatePost(post);
-            var postModel = mapper.mapToModel(updatedPost);
-            return ResponseEntity.ok(postModel);
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
+    public ResponseEntity<PostModel> update(@RequestBody UpdatePostModel updatePostModel) {
+        return postService.updatePost(updatePostModel)
+                .buildResponseEntity(mapper::mapToModel);
     }
 
-    @PostMapping(path = "/post/delete/{id}")
-    public ResponseEntity delete(Long id) {
-        try {
-            postService.deletePost(id);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity
-                    .status(500)
-                    .build();
-        }
+    @DeleteMapping(path = "/post/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        return postService.deletePost(id)
+                .buildResponseEntity(x -> x);
     }
 }

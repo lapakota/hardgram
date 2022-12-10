@@ -1,12 +1,12 @@
 package hardsign.server.services;
 
+import hardsign.server.common.Result;
+import hardsign.server.common.Status;
 import hardsign.server.entities.UserEntity;
 import hardsign.server.repositories.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.security.core.userdetails.User;
-
-import java.util.Optional;
+import org.springframework.stereotype.Component;
 
 
 @Component
@@ -17,10 +17,9 @@ public class CurrentUserService {
         this.userRepository = userRepository;
     }
 
-    public Optional<UserEntity> getCurrentUser() {
+    public Result<UserEntity> getCurrentUser() {
         var principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var user = (User) principal;
-        var byNickname = userRepository.findByNickname(user.getUsername());
-        return Optional.ofNullable(byNickname);
+        return Result.of(userRepository.findByNickname(user.getUsername()), Status.NotFound);
     }
 }

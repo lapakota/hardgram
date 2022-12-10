@@ -7,11 +7,10 @@ import java.util.Date;
 @Entity
 @Table(name = "comments")
 public class CommentEntity {
-     public CommentEntity() {
-
-     }
+    public CommentEntity() { }
 
     public CommentEntity(UserEntity user, PostEntity post, String text, Date createTime) {
+        this.id = 0L;
         this.user = user;
         this.post = post;
         this.text = text;
@@ -20,13 +19,13 @@ public class CommentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
-    @ManyToOne(targetEntity = UserEntity.class)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    @ManyToOne(targetEntity = PostEntity.class)
+    @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)
     private PostEntity post;
 
@@ -69,6 +68,6 @@ public class CommentEntity {
     }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 }
