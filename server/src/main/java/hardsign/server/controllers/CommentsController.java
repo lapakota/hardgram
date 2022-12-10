@@ -8,6 +8,8 @@ import hardsign.server.services.CommentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class CommentsController {
     private final CommentService commentService;
@@ -27,6 +29,12 @@ public class CommentsController {
     @PostMapping("comment/update")
     public ResponseEntity<CommentModel> update(@RequestBody UpdateCommentModel updateCommentModel) {
         return commentService.update(updateCommentModel)
+                .buildResponseEntity(mapper::mapToModel);
+    }
+
+    @GetMapping("comments/{postId}")
+    public ResponseEntity<List<CommentModel>> get(@PathVariable Long postId) {
+        return commentService.getAllByPost(postId)
                 .buildResponseEntity(mapper::mapToModel);
     }
 

@@ -10,6 +10,7 @@ import hardsign.server.services.CurrentUserService;
 import hardsign.server.utils.Helper;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Objects;
 
 @Component
@@ -39,6 +40,10 @@ public class Mapper {
                 comment.getUser().getId(),
                 comment.getText(),
                 comment.getCreateTime());
+    }
+
+    public List<CommentModel> mapToModel(List<CommentEntity> comments) {
+        return comments.stream().map(this::mapToModel).toList();
     }
 
     private boolean isPostLikedByCurrentUser(PostEntity post) {

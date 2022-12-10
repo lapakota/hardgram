@@ -9,10 +9,10 @@ import hardsign.server.models.comment.AddCommentModel;
 import hardsign.server.models.comment.UpdateCommentModel;
 import hardsign.server.repositories.CommentRepository;
 import hardsign.server.repositories.PostRepository;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class CommentService {
@@ -37,6 +37,14 @@ public class CommentService {
         return currentUserService.getCurrentUser()
                 .then(user -> createComment(user, optional.get(), addCommentModel))
                 .then(commentRepository::save);
+    }
+
+    public Result<List<CommentEntity>> getAllByPost(Long postId) {
+        var optional = postRepository.findById(postId);
+        if (optional.isEmpty())
+            return Result.fault(Status.NotFound);
+
+        return Result.of(optional.get().getComments());
     }
 
     public Result<CommentEntity> update(UpdateCommentModel updateCommentModel) {
