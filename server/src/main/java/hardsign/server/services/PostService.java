@@ -7,11 +7,12 @@ import hardsign.server.entities.UserEntity;
 import hardsign.server.models.post.CreatePostModel;
 import hardsign.server.models.post.UpdatePostModel;
 import hardsign.server.repositories.PostRepository;
+import hardsign.server.repositories.SubscriptionsRepository;
 import hardsign.server.utils.Helper;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
-import java.util.Date;
+import java.util.*;
 
 
 @Component
@@ -19,13 +20,23 @@ public class PostService {
     private final PostRepository postRepository;
     private final CurrentUserService currentUserService;
     private final Helper helper;
+    private final SubscriptionsRepository subscriptionsRepository;
 
     @Inject
-    public PostService(PostRepository postRepository, CurrentUserService currentUserService, Helper helper) {
+    public PostService(PostRepository postRepository, CurrentUserService currentUserService, Helper helper,  SubscriptionsRepository subscriptionsRepository) {
         this.postRepository = postRepository;
         this.currentUserService = currentUserService;
         this.helper = helper;
+        this.subscriptionsRepository = subscriptionsRepository;
     }
+
+    public List<PostEntity> getPosts(){
+        var subs = subscriptionsRepository.findByUserId(currentUserService.getCurrentUser().get().getId());
+        var subPosts = subs.stream().map(x -> x.getFollowing().getPosts()).toList();
+        return subPosts.stream().flatMap(Collection::stream).toList();
+    }
+
+
 
     public Result<PostEntity> getPost(Long postId) {
         return Result.fromOptional(postRepository.findById(postId), Status.NotFound);
