@@ -70,7 +70,8 @@ export const PostMenu = observer(({ post, setPosts }: PostMenuProps) => {
           }
         }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        disableScrollLock>
         <MenuItem onClick={onEdit}>
           <ListItemIcon>
             <Edit fontSize="small" />

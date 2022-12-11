@@ -73,7 +73,8 @@ export const AccountMenu = observer(() => {
           }
         }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        disableScrollLock>
         <MenuItem onClick={onAccountClick}>
           <Avatar src={userInfoStore.userInfo?.avatar} />
           My account
