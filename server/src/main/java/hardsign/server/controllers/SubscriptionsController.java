@@ -1,5 +1,6 @@
 package hardsign.server.controllers;
 
+import hardsign.server.common.mapper.Mapper;
 import hardsign.server.models.user.UserModel;
 import hardsign.server.services.SubscriptionsService;
 import org.springframework.http.ResponseEntity;
@@ -12,50 +13,39 @@ import java.util.List;
 @CrossOrigin
 public class SubscriptionsController {
     private final SubscriptionsService subscriptionsService;
+    private final Mapper mapper;
 
     @Inject
-    public SubscriptionsController(SubscriptionsService subscriptionsService) {
+    public SubscriptionsController(SubscriptionsService subscriptionsService, Mapper mapper) {
         this.subscriptionsService = subscriptionsService;
+        this.mapper = mapper;
     }
 
     @GetMapping("/following/{nickname}")
     public ResponseEntity<List<UserModel>> getFollowing(@PathVariable String nickname){
-      try {
-          var users = subscriptionsService.getFollowing(nickname);
-          return ResponseEntity.ok(users);
-      } catch (Exception e){
-          return ResponseEntity.internalServerError().build();
-      }
+      return subscriptionsService.getFollowing(nickname)
+              .buildResponseEntity(x -> x.stream().map(mapper::mapToModel).toList());
     }
 
     @GetMapping("/followers/{nickname}")
     public ResponseEntity<List<UserModel>> getFollowers(@PathVariable String nickname){
-       try {
-            var users = subscriptionsService.getFollowers(nickname);
-            return ResponseEntity.ok(users);
-       } catch (Exception e){
-           return ResponseEntity.internalServerError().build();
-        }
+        return subscriptionsService.getFollowers(nickname)
+                .buildResponseEntity(x -> x.stream().map(mapper::mapToModel).toList());
     }
 
     @PostMapping(path = "/unfollow/{nickname}")
-    public ResponseEntity unFollow(@PathVariable String nickname) {
+    public ResponseEntity unfollow(@PathVariable String nickname) {
         try {
             subscriptionsService.deleteFollow(nickname);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return  ResponseEntity.internalServerError().build();
         }
-
     }
 
     @PostMapping(path = "/follow/{nickname}")
     public ResponseEntity follow(@PathVariable String nickname) {
-        try {
-            subscriptionsService.addFollow(nickname);
-            return ResponseEntity.ok().build();
-        } catch (Exception e){
-            return ResponseEntity.internalServerError().build();
-        }
+        return subscriptionsService.addFollow(nickname)
+                .buildResponseEntity();
     }
 }

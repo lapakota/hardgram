@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
@@ -102,6 +101,11 @@ public class Result<T> {
 
     public <F> ResponseEntity<F> buildResponseEntity(Function<T, F> modelMapper) {
         return then(() -> modelMapper.apply(get()))
+                .mapStatus(statusMapper::map);
+    }
+
+    public ResponseEntity<T> buildResponseEntity() {
+        return then(x -> x)
                 .mapStatus(statusMapper::map);
     }
 

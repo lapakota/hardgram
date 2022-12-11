@@ -25,6 +25,6 @@ public class LikeController {
     @DeleteMapping(path = "/like/{postId}")
     public ResponseEntity<String> remove(@PathVariable Long postId) {
         return likeService.removeLike(postId)
-                .buildResponseEntity(x -> x);
+                .buildResponseEntity();
     }
 }
