@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styles from './ProfilePage.module.scss';
 import { UserInfoModel } from '../../../typescript/models/User/UserInfoModel';
 import { getUserInfo } from '../../../api/userApi';
@@ -8,15 +8,13 @@ import { useStores } from '../../../hooks/useStores';
 import { observer } from 'mobx-react-lite';
 import { PostModel } from '../../../typescript/models/Post/PostModel';
 import { getUserPosts } from '../../../api/postsApi';
-import { Avatar, Button, IconButton, Stack } from '@mui/material';
-import { Settings as SettingsIcon } from '@mui/icons-material';
+import { Avatar, Button, Stack } from '@mui/material';
 import { useModal } from '../../../hooks/useModal';
 import { AddPostModal } from './AddPostModal/AddPostModal';
 import { Layout } from '../../common/Layout/Layout';
 import { PostCard } from '../../common/PostCard/PostCard';
 
 export const ProfilePage = observer((): React.ReactElement => {
-  const navigate = useNavigate();
   const { nickname } = useParams<{ nickname: string }>();
   const { userInfoStore } = useStores();
 
@@ -55,11 +53,6 @@ export const ProfilePage = observer((): React.ReactElement => {
                 <Button variant={'contained'} color={'primary'} size={'small'} disabled>
                   Follow
                 </Button>
-                {isOwnPage && (
-                  <IconButton onClick={() => navigate('/user/settings/')}>
-                    <SettingsIcon />
-                  </IconButton>
-                )}
               </Stack>
               <span>{posts?.length || 0} posts</span>
               <span>{userInfo.fullName}</span>
@@ -78,7 +71,7 @@ export const ProfilePage = observer((): React.ReactElement => {
           <div className={styles.posts}>
             <Stack direction={'column'} spacing={2}>
               {posts?.map((post) => (
-                <PostCard key={post.postId} post={post} />
+                <PostCard key={post.postId} post={post} setPosts={setPosts} />
               ))}
             </Stack>
           </div>

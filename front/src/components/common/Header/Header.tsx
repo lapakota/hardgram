@@ -3,7 +3,8 @@ import styles from './Header.module.scss';
 import { observer } from 'mobx-react-lite';
 import { useStores } from '../../../hooks/useStores';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Avatar, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
+import { AccountMenu } from './AccountMenu';
 
 export const Header = observer(() => {
   const location = useLocation();
@@ -17,9 +18,7 @@ export const Header = observer(() => {
         <NavLink to={'/'} className={styles.logo}>
           <span>hardgram</span>
         </NavLink>
-        <NavLink to={`/user/profile/${userInfoStore.userInfo?.nickname}`}>
-          <Avatar src={userInfoStore.userInfo?.avatar} />
-        </NavLink>
+        <AccountMenu />
       </Stack>
     </header>
   );
