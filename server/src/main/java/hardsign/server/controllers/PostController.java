@@ -27,7 +27,7 @@ public class PostController {
         this.mapper = mapper;
     }
 
-    @GetMapping(value = "posts/me")
+    @GetMapping(value = "posts/feed")
     public ResponseEntity<List<PostModel>> getPosts(){
         var posts = postService.getPosts();
         var postsModels = posts.stream().map(mapper::mapToModel).toList();

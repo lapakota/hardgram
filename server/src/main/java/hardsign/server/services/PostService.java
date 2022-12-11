@@ -23,7 +23,7 @@ public class PostService {
     private final SubscriptionsRepository subscriptionsRepository;
 
     @Inject
-    public PostService(PostRepository postRepository, CurrentUserService currentUserService, Helper helper,  SubscriptionsRepository subscriptionsRepository) {
+    public PostService(PostRepository postRepository, CurrentUserService currentUserService, Helper helper, SubscriptionsRepository subscriptionsRepository) {
         this.postRepository = postRepository;
         this.currentUserService = currentUserService;
         this.helper = helper;
@@ -33,10 +33,8 @@ public class PostService {
     public List<PostEntity> getPosts(){
         var subs = subscriptionsRepository.findByUserId(currentUserService.getCurrentUser().get().getId());
         var subPosts = subs.stream().map(x -> x.getFollowing().getPosts()).toList();
-        return subPosts.stream().flatMap(Collection::stream).toList();
+        return subPosts.stream().flatMap(Collection::stream).sorted((x, y) -> y.getCreateTime().compareTo(x.getCreateTime())).toList();
     }
-
-
 
     public Result<PostEntity> getPost(Long postId) {
         return Result.fromOptional(postRepository.findById(postId), Status.NotFound);
