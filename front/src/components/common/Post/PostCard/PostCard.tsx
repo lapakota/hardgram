@@ -9,21 +9,22 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { observer } from 'mobx-react-lite';
-import { useStores } from '../../../hooks/useStores';
-import { PostModel } from '../../../typescript/models/Post/PostModel';
+import { useStores } from '../../../../hooks/useStores';
+import { PostModel } from '../../../../typescript/models/Post/PostModel';
 import { useEffect, useState } from 'react';
-import { getUserInfo } from '../../../api/userApi';
-import { UserInfoModel } from '../../../typescript/models/User/UserInfoModel';
+import { getUserInfo } from '../../../../api/userApi';
+import { UserInfoModel } from '../../../../typescript/models/User/UserInfoModel';
 import moment from 'moment';
-import { addLike, deleteLike } from '../../../api/likesApi';
+import { addLike, deleteLike } from '../../../../api/likesApi';
 import { PostMenu } from './PostMenu';
 
 interface PostCardProps {
   post: PostModel;
   setPosts: React.Dispatch<React.SetStateAction<PostModel[] | undefined>>;
+  onOpenEditorModal: (post?: PostModel) => void;
 }
 
-export const PostCard = observer(({ post, setPosts }: PostCardProps) => {
+export const PostCard = observer(({ post, setPosts, onOpenEditorModal }: PostCardProps) => {
   const {
     userInfoStore: { token, userInfo }
   } = useStores();
@@ -60,13 +61,19 @@ export const PostCard = observer(({ post, setPosts }: PostCardProps) => {
         avatar={<Avatar src={creatorInfo?.avatar} />}
         action={
           creatorInfo?.nickname === userInfo?.nickname ? (
-            <PostMenu post={post} setPosts={setPosts} />
+            <PostMenu post={post} setPosts={setPosts} onOpenEditorModal={onOpenEditorModal} />
           ) : null
         }
         title={creatorInfo?.nickname}
         subheader={moment(post.createTime).calendar()}
       />
-      <CardMedia component={'img'} height={450} image={post.photos ? post.photos[0] : undefined} />
+      <CardMedia
+        component={'img'}
+        height={450}
+        image={post.photos ? post.photos[0] : undefined}
+        sx={{ cursor: 'pointer' }}
+        onClick={() => console.log('jopa')}
+      />
       {post.description && (
         <CardContent sx={{ height: 40 }}>
           <Typography

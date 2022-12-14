@@ -10,9 +10,9 @@ import { PostModel } from '../../../typescript/models/Post/PostModel';
 import { getUserPosts } from '../../../api/postsApi';
 import { Avatar, Button, Stack } from '@mui/material';
 import { useModal } from '../../../hooks/useModal';
-import { AddPostModal } from './AddPostModal/AddPostModal';
+import { PostEditorModal } from './PostEditorModal/PostEditorModal';
 import { Layout } from '../../common/Layout/Layout';
-import { PostCard } from '../../common/PostCard/PostCard';
+import { PostCard } from '../../common/Post/PostCard/PostCard';
 
 export const ProfilePage = observer((): React.ReactElement => {
   const { nickname } = useParams<{ nickname: string }>();
@@ -20,8 +20,9 @@ export const ProfilePage = observer((): React.ReactElement => {
 
   const [userInfo, setUserInfo] = useState<UserInfoModel | undefined>();
   const [posts, setPosts] = useState<PostModel[] | undefined>();
+  const [activePost, setActivePost] = useState<PostModel | undefined>();
 
-  const [isModalOpen, handleModalOpen, handleModalClose] = useModal();
+  const [isEditorModalOpen, handleEditorModalOpen, handleEditorModalClose] = useModal();
 
   const isOwnPage = userInfoStore.userInfo?.nickname === nickname;
 
@@ -37,6 +38,16 @@ export const ProfilePage = observer((): React.ReactElement => {
     fetchProfileInfo();
   }, [nickname]);
 
+  const onOpenEditorModal = (post?: PostModel) => {
+    post && setActivePost(post);
+    handleEditorModalOpen();
+  };
+
+  const onCloseEditorModal = () => {
+    setActivePost(undefined);
+    handleEditorModalClose();
+  };
+
   return (
     <Layout className={styles.root}>
       {userInfo ? (
@@ -50,9 +61,11 @@ export const ProfilePage = observer((): React.ReactElement => {
             <Stack direction="column" spacing={2}>
               <Stack direction="row" spacing={3}>
                 <h2 className={styles.userNickname}>{userInfo.nickname}</h2>
-                <Button variant={'contained'} color={'primary'} size={'small'} disabled>
-                  Follow
-                </Button>
+                {!isOwnPage && (
+                  <Button variant={'contained'} color={'primary'} size={'small'}>
+                    Follow
+                  </Button>
+                )}
               </Stack>
               <span>{posts?.length || 0} posts</span>
               <span>{userInfo.fullName}</span>
@@ -63,7 +76,7 @@ export const ProfilePage = observer((): React.ReactElement => {
                 variant={'outlined'}
                 color={'primary'}
                 size={'large'}
-                onClick={handleModalOpen}>
+                onClick={() => onOpenEditorModal()}>
                 Add post
               </Button>
             )}
@@ -71,11 +84,23 @@ export const ProfilePage = observer((): React.ReactElement => {
           <div className={styles.posts}>
             <Stack direction={'column'} spacing={2}>
               {posts?.map((post) => (
-                <PostCard key={post.postId} post={post} setPosts={setPosts} />
+                <PostCard
+                  key={post.postId}
+                  post={post}
+                  setPosts={setPosts}
+                  onOpenEditorModal={onOpenEditorModal}
+                />
               ))}
             </Stack>
           </div>
-          <AddPostModal isOpen={isModalOpen} handleClose={handleModalClose} setPosts={setPosts} />
+          {isEditorModalOpen && (
+            <PostEditorModal
+              isOpen={isEditorModalOpen}
+              activePost={activePost}
+              handleClose={onCloseEditorModal}
+              setPosts={setPosts}
+            />
+          )}
         </div>
       ) : (
         <Spinner />

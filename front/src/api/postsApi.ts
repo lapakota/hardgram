@@ -8,7 +8,7 @@ export const createPost = async (post: CreatePostModel, token: string): Promise<
   axios.post(`${BASE_ROUTE}/post/create`, post, { ...AxiosAuthConfig(token) });
 
 export const updatePost = async (post: UpdatePostModel, token: string): Promise<Response> =>
-  axios.put(`${BASE_ROUTE}/post/update`, post, { ...AxiosAuthConfig(token) });
+  axios.post(`${BASE_ROUTE}/post/update`, post, { ...AxiosAuthConfig(token) });
 
 export const getPost = async (postId: number, token: string): Promise<PostModel> =>
   axios

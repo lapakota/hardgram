@@ -5,18 +5,19 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import { observer } from 'mobx-react-lite';
-import { useStores } from '../../../hooks/useStores';
+import { useStores } from '../../../../hooks/useStores';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Delete, Edit } from '@mui/icons-material';
-import { PostModel } from '../../../typescript/models/Post/PostModel';
-import { deletePost, getUserPosts } from '../../../api/postsApi';
+import { PostModel } from '../../../../typescript/models/Post/PostModel';
+import { deletePost, getUserPosts } from '../../../../api/postsApi';
 
 interface PostMenuProps {
   post: PostModel;
   setPosts: React.Dispatch<React.SetStateAction<PostModel[] | undefined>>;
+  onOpenEditorModal: (post?: PostModel) => void;
 }
 
-export const PostMenu = observer(({ post, setPosts }: PostMenuProps) => {
+export const PostMenu = observer(({ post, setPosts, onOpenEditorModal }: PostMenuProps) => {
   const {
     userInfoStore: { token }
   } = useStores();
@@ -33,7 +34,7 @@ export const PostMenu = observer(({ post, setPosts }: PostMenuProps) => {
   };
 
   const onEdit = () => {
-    // TODO Add editing
+    onOpenEditorModal(post);
   };
 
   const onDelete = async () => {
