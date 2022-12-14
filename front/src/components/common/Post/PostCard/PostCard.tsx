@@ -22,78 +22,81 @@ interface PostCardProps {
   post: PostModel;
   setPosts: React.Dispatch<React.SetStateAction<PostModel[] | undefined>>;
   onOpenEditorModal: (post?: PostModel) => void;
+  onOpenViewerModal: (post?: PostModel) => void;
 }
 
-export const PostCard = observer(({ post, setPosts, onOpenEditorModal }: PostCardProps) => {
-  const {
-    userInfoStore: { token, userInfo }
-  } = useStores();
+export const PostCard = observer(
+  ({ post, setPosts, onOpenEditorModal, onOpenViewerModal }: PostCardProps) => {
+    const {
+      userInfoStore: { token, userInfo }
+    } = useStores();
 
-  const [creatorInfo, setCreatorInfo] = useState<UserInfoModel>();
-  const [isPostLiked, setIsPostLiked] = useState<boolean>(post.liked);
-  const [postLikesCount, setPostLikesCount] = useState<number>(post.likesCount);
+    const [creatorInfo, setCreatorInfo] = useState<UserInfoModel>();
+    const [isPostLiked, setIsPostLiked] = useState<boolean>(post.liked);
+    const [postLikesCount, setPostLikesCount] = useState<number>(post.likesCount);
 
-  useEffect(() => {
-    if (creatorInfo || !token) return;
+    useEffect(() => {
+      if (creatorInfo || !token) return;
 
-    const fetchUserInfo = async () => {
-      const info = await getUserInfo(post.nickname, token);
-      setCreatorInfo(info);
+      const fetchUserInfo = async () => {
+        const info = await getUserInfo(post.nickname, token);
+        setCreatorInfo(info);
+      };
+      fetchUserInfo();
+    }, []);
+
+    const handleLikeBtnClick = () => {
+      if (!token) return;
+
+      const handleClick = async () => {
+        if (isPostLiked) await deleteLike(post.postId, token);
+        else await addLike(post.postId, token);
+        setPostLikesCount((prev) => (isPostLiked ? --prev : ++prev));
+        setIsPostLiked((prev) => !prev);
+      };
+      handleClick();
     };
-    fetchUserInfo();
-  }, []);
 
-  const handleLikeBtnClick = () => {
-    if (!token) return;
-
-    const handleClick = async () => {
-      if (isPostLiked) await deleteLike(post.postId, token);
-      else await addLike(post.postId, token);
-      setPostLikesCount((prev) => (isPostLiked ? --prev : ++prev));
-      setIsPostLiked((prev) => !prev);
-    };
-    handleClick();
-  };
-
-  return (
-    <Card sx={{ width: 500 }}>
-      <CardHeader
-        avatar={<Avatar src={creatorInfo?.avatar} />}
-        action={
-          creatorInfo?.nickname === userInfo?.nickname ? (
-            <PostMenu post={post} setPosts={setPosts} onOpenEditorModal={onOpenEditorModal} />
-          ) : null
-        }
-        title={creatorInfo?.nickname}
-        subheader={moment(post.createTime).calendar()}
-      />
-      <CardMedia
-        component={'img'}
-        height={450}
-        image={post.photos ? post.photos[0] : undefined}
-        sx={{ cursor: 'pointer' }}
-        onClick={() => console.log('jopa')}
-      />
-      {post.description && (
-        <CardContent sx={{ height: 40 }}>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{
-              wordBreak: 'break-all',
-              overflow: 'hidden',
-              height: '100%'
-            }}>
-            {post.description}
-          </Typography>
-        </CardContent>
-      )}
-      <CardActions disableSpacing>
-        <IconButton onClick={handleLikeBtnClick} sx={{ color: isPostLiked ? 'red' : '' }}>
-          <FavoriteIcon />
-        </IconButton>
-        {postLikesCount}
-      </CardActions>
-    </Card>
-  );
-});
+    return (
+      <Card sx={{ width: 500 }}>
+        <CardHeader
+          avatar={<Avatar src={creatorInfo?.avatar} />}
+          action={
+            creatorInfo?.nickname === userInfo?.nickname ? (
+              <PostMenu post={post} setPosts={setPosts} onOpenEditorModal={onOpenEditorModal} />
+            ) : null
+          }
+          title={creatorInfo?.nickname}
+          subheader={moment(post.createTime).calendar()}
+        />
+        <CardMedia
+          component={'img'}
+          height={450}
+          image={post.photos ? post.photos[0] : undefined}
+          sx={{ cursor: 'pointer' }}
+          onClick={() => onOpenViewerModal(post)}
+        />
+        {post.description && (
+          <CardContent sx={{ height: 40 }}>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{
+                wordBreak: 'break-all',
+                overflow: 'hidden',
+                height: '100%'
+              }}>
+              {post.description}
+            </Typography>
+          </CardContent>
+        )}
+        <CardActions disableSpacing>
+          <IconButton onClick={handleLikeBtnClick} sx={{ color: isPostLiked ? 'red' : '' }}>
+            <FavoriteIcon />
+          </IconButton>
+          {postLikesCount}
+        </CardActions>
+      </Card>
+    );
+  }
+);

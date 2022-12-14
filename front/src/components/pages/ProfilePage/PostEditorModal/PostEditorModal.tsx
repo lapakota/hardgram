@@ -23,7 +23,7 @@ const MODAL_BOX_STYLE = {
   width: 500,
   bgcolor: 'background.paper',
   boxShadow: 32,
-  p: 6
+  p: 5
 };
 
 interface FormValues {
@@ -105,7 +105,11 @@ export const PostEditorModal = observer(
               {photos.length > 0 && (
                 <Carousel autoPlay={false} height={350} animation={'slide'}>
                   {photos.map((photo, idx) => (
-                    <Stack justifyContent={'center'} alignItems={'center'} key={idx}>
+                    <Stack
+                      justifyContent={'center'}
+                      alignItems={'center'}
+                      key={idx}
+                      sx={{ height: 350 }}>
                       <img
                         src={photo}
                         alt={'post photo'}

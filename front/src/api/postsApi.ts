@@ -17,6 +17,13 @@ export const getPost = async (postId: number, token: string): Promise<PostModel>
     })
     .then((x) => x.data);
 
+export const getPostsFeed = async (token: string): Promise<PostModel[]> =>
+  axios
+    .get(`${BASE_ROUTE}/posts/feed`, {
+      ...AxiosAuthConfig(token)
+    })
+    .then((x) => x.data);
+
 export const getUserPosts = async (nickname: string, token: string): Promise<PostModel[]> =>
   axios.get(`${BASE_ROUTE}/posts/${nickname}`, { ...AxiosAuthConfig(token) }).then((x) => x.data);
 
