@@ -58,7 +58,8 @@ public class PostEntity {
     }
 
     public void setPhotos(List<byte[]> photos) {
-        this.photos = photos;
+        this.photos.clear();
+        this.photos.addAll(photos);
     }
 
     public Date getCreateTime() {

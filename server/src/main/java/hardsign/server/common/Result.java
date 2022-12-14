@@ -36,6 +36,7 @@ public class Result<T> {
         try {
             return Result.ok(function.get());
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return Result.fault(status);
         }
     }
@@ -90,9 +91,7 @@ public class Result<T> {
     }
 
     public <F> Result<F> then(Function<T, F> function) {
-        if (status != Status.Success)
-            return then(function, status);
-        return then(function, Status.Success);
+        return then(function, Status.ServerError);
     }
 
     public <F> F mapStatus(Function<Result<T>, F> statusMapper) {
