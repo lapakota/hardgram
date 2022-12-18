@@ -6,6 +6,10 @@ html, body {
   margin: 0;
 }
 
+b {
+  font-weight: 500;
+}
+
 #root {
   width: 100%;
   min-width: $content-width + $layout-padding * 2;

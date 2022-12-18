@@ -13,7 +13,7 @@ import { useStores } from '../../../../hooks/useStores';
 import { PostModel } from '../../../../typescript/models/Post/PostModel';
 import { useEffect, useState } from 'react';
 import { getUserInfo } from '../../../../api/userApi';
-import { UserInfoModel } from '../../../../typescript/models/User/UserInfoModel';
+import { UserModel } from '../../../../typescript/models/User/UserModel';
 import moment from 'moment';
 import { addLike, deleteLike } from '../../../../api/likesApi';
 import { PostMenu } from './PostMenu';
@@ -35,7 +35,7 @@ export const PostCard = observer(
     } = useStores();
     const navigate = useNavigate();
 
-    const [creatorInfo, setCreatorInfo] = useState<UserInfoModel>();
+    const [creatorInfo, setCreatorInfo] = useState<UserModel>();
     const [isPostLiked, setIsPostLiked] = useState<boolean>(post.liked);
     const [postLikesCount, setPostLikesCount] = useState<number>(post.likesCount);
 

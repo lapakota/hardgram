@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite';
 import { useStores } from '../../../../hooks/useStores';
 import moment from 'moment';
 import { CommentModel } from '../../../../typescript/models/Comment/CommentModel';
-import { UserInfoModel } from '../../../../typescript/models/User/UserInfoModel';
+import { UserModel } from '../../../../typescript/models/User/UserModel';
 import { useEffect, useState } from 'react';
 import { getUserInfo } from '../../../../api/userApi';
 import { CommentMenu } from './CommentMenu';
@@ -23,7 +23,7 @@ export const CommentCard = observer(({ comment, setComments }: CommentCardProps)
     userInfoStore: { token, userInfo }
   } = useStores();
 
-  const [ownerInfo, setOwnerInfo] = useState<UserInfoModel>();
+  const [ownerInfo, setOwnerInfo] = useState<UserModel>();
 
   useEffect(() => {
     if (!token) return;

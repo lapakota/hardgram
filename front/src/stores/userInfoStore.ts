@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { UserInfoModel } from '../typescript/models/User/UserInfoModel';
+import { UserModel } from '../typescript/models/User/UserModel';
 import {
   loadFromLocalStorage,
   LocalStorageKeys,
@@ -7,7 +7,7 @@ import {
 } from '../utils/localStorageHelper';
 
 export class UserInfoStore {
-  public userInfo?: UserInfoModel;
+  public userInfo?: UserModel;
   public token?: string;
 
   constructor() {
@@ -16,7 +16,7 @@ export class UserInfoStore {
     this.token = loadFromLocalStorage(LocalStorageKeys.Token);
   }
 
-  initStore(userInfo: UserInfoModel, token: string) {
+  initStore(userInfo: UserModel, token: string) {
     this.userInfo = userInfo;
     this.token = token;
     saveToLocalStorage(LocalStorageKeys.UserInfo, userInfo);

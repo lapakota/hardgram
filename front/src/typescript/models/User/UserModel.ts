@@ -1,6 +1,6 @@
 import { PostModel } from '../Post/PostModel';
 
-export interface UserInfoModel {
+export interface UserModel {
   id: number;
   nickname: string;
   fullName?: string;
