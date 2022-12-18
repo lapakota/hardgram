@@ -19,7 +19,8 @@ export class UserInfoStore {
   initStore(userInfo: UserModel, token: string) {
     this.userInfo = userInfo;
     this.token = token;
-    saveToLocalStorage(LocalStorageKeys.UserInfo, userInfo);
+    // По хорошему должна прилетать моделька без постов
+    saveToLocalStorage(LocalStorageKeys.UserInfo, { ...userInfo, posts: [] });
     saveToLocalStorage(LocalStorageKeys.Token, token);
   }
 

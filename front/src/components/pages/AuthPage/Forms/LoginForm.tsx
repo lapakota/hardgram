@@ -37,7 +37,7 @@ export const LoginForm = observer(() => {
       const userInfo = await me(token);
 
       userInfoStore.initStore(userInfo, token);
-      navigate(`/user/profile/${userInfoStore.userInfo?.nickname}`);
+      navigate(`/user/profile/${userInfo.nickname}`);
     } catch (e) {
       setShowErrorToast(true);
     }

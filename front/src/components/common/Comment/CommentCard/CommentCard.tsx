@@ -12,6 +12,7 @@ import { UserModel } from '../../../../typescript/models/User/UserModel';
 import { useEffect, useState } from 'react';
 import { getUserInfo } from '../../../../api/userApi';
 import { CommentMenu } from './CommentMenu';
+import { useNavigate } from 'react-router-dom';
 
 interface CommentCardProps {
   comment: CommentModel;
@@ -19,6 +20,7 @@ interface CommentCardProps {
 }
 
 export const CommentCard = observer(({ comment, setComments }: CommentCardProps) => {
+  const navigate = useNavigate();
   const {
     userInfoStore: { token, userInfo }
   } = useStores();
@@ -40,7 +42,15 @@ export const CommentCard = observer(({ comment, setComments }: CommentCardProps)
     <div>
       <Card sx={{ width: 280 }} variant={'outlined'}>
         <CardHeader
-          avatar={<Avatar src={ownerInfo?.avatar} sx={{ width: 32, height: 32 }} />}
+          avatar={
+            <Avatar
+              src={ownerInfo?.avatar}
+              sx={{ width: 32, height: 32, cursor: 'pointer' }}
+              onClick={() => {
+                navigate(`/user/profile/${comment.nickname}`);
+              }}
+            />
+          }
           action={isOwnComment ? <CommentMenu comment={comment} setComments={setComments} /> : null}
           title={ownerInfo?.nickname || 'anonymous'}
           subheader={moment(comment.createTime).fromNow()}

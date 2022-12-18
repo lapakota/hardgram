@@ -78,7 +78,7 @@ export const PostCard = observer(
               <PostMenu post={post} setPosts={setPosts} onOpenEditorModal={onOpenEditorModal} />
             ) : null
           }
-          title={creatorInfo?.nickname}
+          title={creatorInfo?.nickname || 'anonymous'}
           subheader={moment(post.createTime).calendar()}
         />
         <CardMedia
