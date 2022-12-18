@@ -20,7 +20,7 @@ public class CommentsController {
         this.mapper = mapper;
     }
 
-    @PostMapping("comment/")
+    @PostMapping("comment")
     public ResponseEntity<CommentModel> add(@RequestBody AddCommentModel addCommentModel) {
         return commentService.add(addCommentModel)
                 .buildResponseEntity(mapper::mapToModel);

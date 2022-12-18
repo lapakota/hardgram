@@ -17,6 +17,9 @@ import { UserInfoModel } from '../../../../typescript/models/User/UserInfoModel'
 import moment from 'moment';
 import { addLike, deleteLike } from '../../../../api/likesApi';
 import { PostMenu } from './PostMenu';
+import { AddCommentOutlined } from '@mui/icons-material';
+import { Stack } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 interface PostCardProps {
   post: PostModel;
@@ -30,6 +33,7 @@ export const PostCard = observer(
     const {
       userInfoStore: { token, userInfo }
     } = useStores();
+    const navigate = useNavigate();
 
     const [creatorInfo, setCreatorInfo] = useState<UserInfoModel>();
     const [isPostLiked, setIsPostLiked] = useState<boolean>(post.liked);
@@ -60,7 +64,15 @@ export const PostCard = observer(
     return (
       <Card sx={{ width: 500 }}>
         <CardHeader
-          avatar={<Avatar src={creatorInfo?.avatar} />}
+          avatar={
+            <Avatar
+              src={creatorInfo?.avatar}
+              sx={{ cursor: 'pointer' }}
+              onClick={() => {
+                navigate(`/user/profile/${creatorInfo?.nickname}`);
+              }}
+            />
+          }
           action={
             creatorInfo?.nickname === userInfo?.nickname ? (
               <PostMenu post={post} setPosts={setPosts} onOpenEditorModal={onOpenEditorModal} />
@@ -91,10 +103,20 @@ export const PostCard = observer(
           </CardContent>
         )}
         <CardActions disableSpacing>
-          <IconButton onClick={handleLikeBtnClick} sx={{ color: isPostLiked ? 'red' : '' }}>
-            <FavoriteIcon />
-          </IconButton>
-          {postLikesCount}
+          <Stack direction={'row'} spacing={2} justifyContent={'center'}>
+            <span>
+              <IconButton onClick={handleLikeBtnClick} sx={{ color: isPostLiked ? 'red' : '' }}>
+                <FavoriteIcon />
+              </IconButton>
+              {postLikesCount}
+            </span>
+            <span>
+              <IconButton onClick={() => onOpenViewerModal(post)}>
+                <AddCommentOutlined />
+              </IconButton>
+              {post.commentsCount}
+            </span>
+          </Stack>
         </CardActions>
       </Card>
     );

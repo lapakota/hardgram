@@ -1,4 +1,4 @@
-import { TextField } from '@mui/material';
+import { SxProps, TextField } from '@mui/material';
 import React from 'react';
 import { Controller, FieldErrors, UseControllerProps } from 'react-hook-form';
 
@@ -10,6 +10,8 @@ interface FormInputTextProps extends UseControllerProps {
   multiline?: boolean;
   defaultValue?: string;
   disabled?: boolean;
+  sx?: SxProps;
+  rows?: number;
   control: any;
 }
 
@@ -23,7 +25,9 @@ export const FormInputText = ({
   multiline,
   defaultValue,
   disabled,
-  fieldType
+  fieldType,
+  sx,
+  rows
 }: FormInputTextProps) => {
   return (
     <Controller
@@ -31,6 +35,8 @@ export const FormInputText = ({
       control={control}
       render={({ field: { onChange, value } }) => (
         <TextField
+          rows={rows}
+          sx={sx}
           disabled={disabled}
           defaultValue={defaultValue}
           required={required}

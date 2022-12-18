@@ -123,7 +123,6 @@ export const ProfilePage = observer((): React.ReactElement => {
               isOpen={isPostModalOpen}
               activePost={activePost}
               handleClose={onCloseModal('viewer')}
-              setPosts={setPosts}
             />
           )}
         </div>

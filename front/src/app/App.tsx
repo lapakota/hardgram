@@ -4,7 +4,7 @@ import { Header } from '../components/common/Header/Header';
 import { ProtectedRoute } from '../components/common/ProtectedRoute/ProtectedRoute';
 import { LoginForm } from '../components/pages/AuthPage/Forms/LoginForm';
 import { RegisterForm } from '../components/pages/AuthPage/Forms/RegisterForm';
-import { MainPage } from '../components/pages/MainPage/MainPage';
+import { FeedPage } from '../components/pages/FeedPage/FeedPage';
 import styles from './App.module.scss';
 import { ProfilePage } from '../components/pages/ProfilePage/ProfilePage';
 import { AuthPage } from '../components/pages/AuthPage';
@@ -41,7 +41,7 @@ function App() {
               path="/"
               element={
                 <ProtectedRoute>
-                  <MainPage />
+                  <FeedPage />
                 </ProtectedRoute>
               }
             />
