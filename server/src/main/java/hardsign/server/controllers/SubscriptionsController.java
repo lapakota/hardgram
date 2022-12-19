@@ -34,9 +34,9 @@ public class SubscriptionsController {
     }
 
     @PostMapping(path = "/unfollow/{nickname}")
-    public ResponseEntity unfollow(@PathVariable String nickname) {
+    public ResponseEntity<Void> unfollow(@PathVariable String nickname) {
         try {
-            subscriptionsService.deleteFollow(nickname);
+            subscriptionsService.unfollow(nickname);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return  ResponseEntity.internalServerError().build();
@@ -44,8 +44,8 @@ public class SubscriptionsController {
     }
 
     @PostMapping(path = "/follow/{nickname}")
-    public ResponseEntity follow(@PathVariable String nickname) {
-        return subscriptionsService.addFollow(nickname)
+    public ResponseEntity<Void> follow(@PathVariable String nickname) {
+        return subscriptionsService.follow(nickname)
                 .buildResponseEntity();
     }
 }

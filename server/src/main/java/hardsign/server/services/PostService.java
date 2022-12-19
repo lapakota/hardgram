@@ -46,10 +46,10 @@ public class PostService {
                 .then(postRepository::save);
     }
 
-    public Result<String> deletePost(Long postId) {
+    public Result<Void> deletePost(Long postId) {
         return Result.of(() -> {
             postRepository.deleteById(postId);
-            return "Success";
+            return null;
         }, Status.NotFound);
     }
 

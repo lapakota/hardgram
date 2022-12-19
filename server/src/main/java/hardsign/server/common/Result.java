@@ -22,7 +22,6 @@ public class Result<T> {
     }
 
     public static <T> Result<T> ok(T value) {
-        Objects.requireNonNull(value);
         return new Result<>(value, Status.Success);
     }
 

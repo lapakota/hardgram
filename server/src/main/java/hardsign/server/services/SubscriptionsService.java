@@ -38,7 +38,7 @@ public class SubscriptionsService {
                 .then(subs -> subs.stream().map(SubscriptionEntity::getUser).toList());
     }
 
-    public Result<?> addFollow(String nickname) {
+    public Result<Void> follow(String nickname) {
         var currentUser = currentUserService.getCurrentUser();
         return currentUser
                 .then(user -> subscriptionsRepository.findByUserId(user.getId()), Status.NotFound)
@@ -46,11 +46,12 @@ public class SubscriptionsService {
                 .then(() -> {
                     var followingUser = userRepository.findByNickname(nickname);
                     var sub = new SubscriptionEntity(currentUser.get(), followingUser);
-                    return subscriptionsRepository.save(sub);
+                    subscriptionsRepository.save(sub);
+                    return null;
                 });
     }
 
-    public void deleteFollow(String nickname) {
+    public void unfollow(String nickname) {
         var subs = subscriptionsRepository.findByUserId(currentUserService.getCurrentUser().get().getId());
         var deletingUser = subs.stream().filter(x -> alreadyFollow(nickname, x)).findFirst();
         deletingUser.ifPresent(subscriptionsRepository::delete);
