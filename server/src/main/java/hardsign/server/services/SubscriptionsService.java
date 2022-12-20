@@ -45,16 +45,20 @@ public class SubscriptionsService {
                 .when(subs -> subs.stream().noneMatch(sub -> alreadyFollow(nickname, sub)), Status.IncorrectArguments)
                 .then(() -> {
                     var followingUser = userRepository.findByNickname(nickname);
-                    var sub = new SubscriptionEntity(currentUser.get(), followingUser);
-                    subscriptionsRepository.save(sub);
+                    var subscription = new SubscriptionEntity(currentUser.get(), followingUser);
+                    subscriptionsRepository.save(subscription);
                     return null;
                 });
     }
 
-    public void unfollow(String nickname) {
-        var subs = subscriptionsRepository.findByUserId(currentUserService.getCurrentUser().get().getId());
-        var deletingUser = subs.stream().filter(x -> alreadyFollow(nickname, x)).findFirst();
-        deletingUser.ifPresent(subscriptionsRepository::delete);
+    public Result<Void> unfollow(String nickname) {
+        return currentUserService.getCurrentUser()
+                .then(user -> subscriptionsRepository.findByUserId(user.getId()))
+                .then(subscriptions -> {
+                    var subscription = subscriptions.stream().filter(x -> alreadyFollow(nickname, x)).findFirst();
+                    subscription.ifPresent(subscriptionsRepository::delete);
+                    return null;
+                });
     }
 
     private boolean alreadyFollow(String nickname, SubscriptionEntity subscription) {
