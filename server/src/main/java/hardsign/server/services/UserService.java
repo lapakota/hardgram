@@ -32,17 +32,13 @@ public class UserService implements UserDetailsService {
         this.currentUserService = currentUserService;
         this.encoder = encoder;
         this.helper = helper;
-        AddDefaultUser();
+        AddDefaultUserIfNotExist();
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         var dbUser = userRepository.findByNickname(username);
         return new User(dbUser.getNickname(), dbUser.getPassword(), new ArrayList<>());
-    }
-
-    public Result<UserEntity> getUser(Long userId) {
-        return Result.fromOptional(userRepository.findById(userId), Status.NotFound);
     }
 
     public Result<UserEntity> getUser(String nickname) {
@@ -79,7 +75,7 @@ public class UserService implements UserDetailsService {
         return new UserEntity(model.getNickname(), model.getFullName(), helper.encodeStringToBase64(model.getAvatar()), password);
     }
 
-    private void AddDefaultUser() {
+    private void AddDefaultUserIfNotExist() {
         var defaultUser = getDefaultUser();
         var dbUser = getUser(defaultUser.getNickname());
 

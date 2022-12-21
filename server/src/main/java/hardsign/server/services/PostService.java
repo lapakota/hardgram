@@ -55,7 +55,7 @@ public class PostService {
 
     public Result<PostEntity> createPost(CreatePostModel createPostModel) {
         return currentUserService.getCurrentUser()
-                .then(user -> createPostEntity(user, createPostModel))
+                .then(user -> createPostEntity(user, createPostModel), Status.IncorrectArguments)
                 .then(postRepository::save);
     }
 
@@ -67,6 +67,9 @@ public class PostService {
     }
 
     private PostEntity createPostEntity(UserEntity user, CreatePostModel createPostModel) {
+        if (createPostModel.getPhotos().size() < 1)
+            throw new UnsupportedOperationException();
+
         var photos = createPostModel.getPhotos().stream().map(helper::encodeStringToBase64).toList();
         return new PostEntity(user, photos, new Date(), createPostModel.getDescription());
     }

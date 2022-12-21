@@ -29,7 +29,7 @@ public class TokenProvider {
 
     private String doGenerateToken(Map<String, Object> claims, String subject) {
         var currentDate = LocalDateTime.now();
-        var tokenExpiration = currentDate.plusDays(1); //TODO
+        var tokenExpiration = currentDate.plusDays(1);
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
