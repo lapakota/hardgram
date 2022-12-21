@@ -15,6 +15,7 @@ import { Layout } from '../../common/Layout/Layout';
 import { PostCard } from '../../common/Post/PostCard/PostCard';
 import { PostViewerModal } from './PostViewerModal/PostViewerModal';
 import { follow, getFollowers, getFollowing, unFollow } from '../../../api/followingApi';
+import { UsersListMenu } from './UsersListMenu';
 
 export const ProfilePage = observer((): React.ReactElement => {
   const { userInfoStore } = useStores();
@@ -120,12 +121,8 @@ export const ProfilePage = observer((): React.ReactElement => {
                 <span>
                   <b>{posts?.length || 0}</b> posts
                 </span>
-                <span>
-                  <b>{followers?.length || 0}</b> followers
-                </span>
-                <span>
-                  <b>{following?.length || 0}</b> following
-                </span>
+                <UsersListMenu label={'followers'} users={followers || []} />
+                <UsersListMenu label={'following'} users={following || []} />
               </Stack>
               <span>{userInfo.fullName}</span>
             </Stack>

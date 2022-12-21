@@ -17,9 +17,10 @@ import { useNavigate } from 'react-router-dom';
 interface CommentCardProps {
   comment: CommentModel;
   setComments: React.Dispatch<React.SetStateAction<CommentModel[] | undefined>>;
+  onModalClose: () => void;
 }
 
-export const CommentCard = observer(({ comment, setComments }: CommentCardProps) => {
+export const CommentCard = observer(({ comment, setComments, onModalClose }: CommentCardProps) => {
   const navigate = useNavigate();
   const {
     userInfoStore: { token, userInfo }
@@ -48,6 +49,7 @@ export const CommentCard = observer(({ comment, setComments }: CommentCardProps)
               sx={{ width: 32, height: 32, cursor: 'pointer' }}
               onClick={() => {
                 navigate(`/user/profile/${comment.nickname}`);
+                onModalClose();
               }}
             />
           }

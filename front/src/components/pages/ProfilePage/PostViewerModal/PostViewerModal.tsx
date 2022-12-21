@@ -132,6 +132,7 @@ export const PostViewerModal = observer(
                         key={comment.commentId}
                         comment={comment}
                         setComments={setComments}
+                        onModalClose={handleClose}
                       />
                     ))}
                   </Stack>
